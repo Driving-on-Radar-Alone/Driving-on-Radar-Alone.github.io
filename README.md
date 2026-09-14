@@ -1,10 +1,10 @@
-# RadarAD — project page
+# Driving on Radar Alone — project page
 
-Anonymous supplementary page for the RadarAD submission. No author name, no
+Anonymous supplementary page for the "Driving on Radar Alone" submission. No author name, no
 affiliation, no lab name appears anywhere in this folder.
 
 The sibling page for the other paper lives at `../../RCScoring/web/`. The two
-share `css/style.css` and `js/app.js` verbatim; RadarAD sets
+share `css/style.css` and `js/app.js` verbatim; this page sets
 `<html data-paper="radarad">`, which swaps the accent from amber to cyan so the
 two pages are not mistaken for one another.
 
@@ -79,7 +79,7 @@ account if you would rather reviewers not connect the two submissions.
 cd web
 git init -b main
 git add -A
-git commit -m "RadarAD project page"
+git commit -m "Project page"
 git remote add origin https://github.com/<anon-account>/<repo>.git
 git push -u origin main
 ```

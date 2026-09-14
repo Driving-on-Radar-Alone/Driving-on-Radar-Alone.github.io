@@ -61,8 +61,7 @@
   --cyan:      #4fb3c9;
 }
 
-/* The two papers share this stylesheet. RadarAD takes a cool signal accent so
-   its page is not mistaken for the RCScoring one: <html data-paper="radarad">. */
+/* Alternate accent, selected with <html data-paper="radarad">. */
 :root[data-paper="radarad"] {
   --accent:      #0d7d94;
   --accent-lo:   #d6edf2;

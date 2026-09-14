@@ -507,6 +507,7 @@ figcaption {
 .rtable tbody tr:last-child th, .rtable tbody tr:last-child td { border-bottom: 0; }
 .tfoot { margin-top: .8rem; font-size: .85rem; color: var(--ink-3); }
 
+.contrib { margin-top: 1.8rem; }
 .contrib li { align-items: flex-start; }
 .contrib .odd-key { padding-top: .25rem; }
 

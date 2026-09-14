@@ -26,6 +26,9 @@
   }
 
   var hasClips = recs.length > 0;
+  // No clip carries a scenario code yet: show the scenario table, but keep the
+  // per-scenario counters and filter chips out of the way until tagging starts.
+  var anyTagged = recs.some(function (r) { return !!r.scenario; });
 
   /* --- hero spec -------------------------------------------------------- */
   var total = recs.reduce(function (a, r) { return a + (r.seconds || 0); }, 0);
@@ -62,13 +65,17 @@
     txt.appendChild(el("p", "sc-detail", s.detail));
 
     var meta = el("p", "sc-meta");
-    var sp = el("span", "num");
-    sp.appendChild(document.createTextNode(s.speeds + " "));
-    sp.appendChild(el("span", "unit", "km/h"));
-    meta.appendChild(sp);
-    var n = countFor(s.code);
-    meta.appendChild(el("span", "num n-clips" + (n ? "" : " n-zero"),
-      n ? n + (n === 1 ? " clip" : " clips") : "no clips yet"));
+    if (s.speeds) {
+      var sp = el("span", "num");
+      sp.appendChild(document.createTextNode(s.speeds + " "));
+      sp.appendChild(el("span", "unit", "km/h"));
+      meta.appendChild(sp);
+    }
+    if (anyTagged) {
+      var n = countFor(s.code);
+      meta.appendChild(el("span", "num n-clips" + (n ? "" : " n-zero"),
+        n ? n + (n === 1 ? " clip" : " clips") : "no clips yet"));
+    }
     txt.appendChild(meta);
 
     head.appendChild(txt);
@@ -119,16 +126,18 @@
     return;
   }
 
-  var unassigned = recs.filter(function (r) { return !r.scenario; }).length;
-  var scItems = [{ value: "all", label: "All", n: recs.length }];
-  scenarios.forEach(function (s) {
-    var n = countFor(s.code);
-    if (n) scItems.push({ value: s.code, label: s.code, n: n });
-  });
-  if (unassigned && scenarios.length) {
-    scItems.push({ value: "__none", label: "Unassigned", n: unassigned });
+  if (anyTagged) {
+    var unassigned = recs.filter(function (r) { return !r.scenario; }).length;
+    var scItems = [{ value: "all", label: "All", n: recs.length }];
+    scenarios.forEach(function (s) {
+      var n = countFor(s.code);
+      if (n) scItems.push({ value: s.code, label: s.code, n: n });
+    });
+    if (unassigned && scenarios.length) {
+      scItems.push({ value: "__none", label: "Unassigned", n: unassigned });
+    }
+    buildChips(document.getElementById("filter-scenario"), scItems, "scenario");
   }
-  buildChips(document.getElementById("filter-scenario"), scItems, "scenario");
 
   var nBase = recs.filter(function (r) { return r.run === "baseline"; }).length;
   var nComf = recs.filter(function (r) { return r.run === "comfort"; }).length;
@@ -170,7 +179,7 @@
     if (r.scenario && byCode[r.scenario]) {
       var b = el("span", "badge badge--sc", r.scenario + " · " + byCode[r.scenario].title);
       badges.appendChild(b);
-    } else {
+    } else if (anyTagged) {
       badges.appendChild(el("span", "badge badge--todo", "unassigned"));
     }
     if (r.run) {

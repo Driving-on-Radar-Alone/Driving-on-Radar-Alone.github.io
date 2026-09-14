@@ -3,9 +3,10 @@
 //  이 파일만 고치면 페이지 전체가 따라 바뀝니다. HTML 은 건드릴 필요 없습니다.
 // =============================================================================
 //
-//  SCENARIOS 가 비어 있는 동안에는 페이지의 Scenarios 섹션이 통째로 숨겨지고,
-//  모든 클립이 필터 없이 그냥 나열됩니다. 아래 주석을 풀고 RadarAD 시나리오를
-//  채우면 표와 필터가 자동으로 생깁니다.
+//  SCENARIOS 는 논문 Sec. V-A 의 일곱 시나리오(S1~S7)로 채워져 있습니다.
+//  아직 어떤 클립에도 scenario 가 붙어 있지 않아서, 페이지는 시나리오 표만
+//  보여 주고 클립은 필터 없이 전부 나열합니다. 아래 RECORDINGS 의 scenario 에
+//  코드를 넣기 시작하면 필터 칩과 클립 수가 자동으로 나타납니다.
 //
 //    code    "R1", "R2", ...  짧은 코드. 표 왼쪽과 클립 배지에 그대로 나옵니다.
 //    group   표를 나누는 머리글. 하나만 쓰면 한 덩어리로 나옵니다.
@@ -14,10 +15,40 @@
 //    speeds  "15 / 30 / 50" 처럼 문자열. 단위(km/h)는 페이지가 붙입니다.
 
 const SCENARIOS = [
-  // { code: "R1", group: "Scenarios",
-  //   title: "",
-  //   detail: "",
-  //   speeds: "15 / 30 / 50" },
+  { code: "S1", group: "",
+    title: "Urban lane keeping",
+    detail: "Lane keeping along the urban block grid, 490 m. The only scenario carrying a strict direct R-versus-L1 comparison, aligned by scenario and speed across sessions; L1 covers it from a mid-course point only, about 200 m, at 20 and 40 km/h.",
+    speeds: "20 \u2013 50" },
+
+  { code: "S2", group: "",
+    title: "Urban right turn",
+    detail: "Right turn at an urban intersection. Auxiliary descriptive result with disclosed condition imbalance; one R run.",
+    speeds: "" },
+
+  { code: "S3", group: "",
+    title: "Urban left turn",
+    detail: "Left turn at an urban intersection. Auxiliary descriptive result with disclosed condition imbalance; one R run.",
+    speeds: "" },
+
+  { code: "S4", group: "",
+    title: "Roundabout",
+    detail: "The 67 m roundabout, driven as its own scenario. One R run; not driven by L1.",
+    speeds: "" },
+
+  { code: "S5", group: "",
+    title: "Highway",
+    detail: "The expressway section, 700\u2013890 m, driven in both directions. The five R runs mix speeds across the range rather than repeating one condition, and are reported as a median with the min\u2013max range. L1 failed or aborted here.",
+    speeds: "40 / 60 / 80" },
+
+  { code: "S6", group: "",
+    title: "GNSS-shadowed zone",
+    detail: "The roofed 135 m corridor, entered with a roundabout U-turn. Two of the three RTK-fixed degraded runs are here, one of which failed to initialize and stays in the denominator. Not driven by L1.",
+    speeds: "" },
+
+  { code: "S7", group: "",
+    title: "Full course",
+    detail: "All domains chained into one 4.78 km drive. Driven by R only; L1 failed or aborted.",
+    speeds: "up to 100" },
 ];
 
 //  아래 표에서 각 클립에 시나리오를 붙입니다.

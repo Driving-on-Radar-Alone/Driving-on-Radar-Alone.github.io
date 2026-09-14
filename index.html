@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-paper="radarad">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RadarAD</title>
+<meta name="description" content="Real-vehicle recordings from the RadarAD experiment campaign.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#recordings">Skip to recordings</a>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Anonymous submission · under review</p>
+    <h1 class="hero-title">RadarAD</h1>
+    <!-- TODO replace with the paper's own one-line description -->
+    <p class="hero-sub">Real-vehicle recordings from the RadarAD experiment campaign</p>
+    <div class="lane" role="presentation"></div>
+    <dl class="spec">
+      <div><dt>Recorded</dt><dd>11 Sep 2026</dd></div>
+      <div><dt>Platform</dt><dd>Instrumented passenger vehicle</dd></div>
+      <div><dt>Cameras</dt><dd>4 synchronised</dd></div>
+      <div><dt>Recordings</dt><dd><span id="spec-count">—</span></dd></div>
+      <div><dt>Footage</dt><dd><span id="spec-mins">—</span></dd></div>
+    </dl>
+  </div>
+</header>
+
+<main>
+
+  <section class="band" id="overview">
+    <div class="wrap">
+      <div class="prose">
+      <h2>What this page holds</h2>
+      <!-- TODO replace this paragraph with the abstract -->
+      <p>
+        This page accompanies the RadarAD submission. It carries the onboard
+        footage from the real-vehicle campaign: every run that was driven, in
+        full, with nothing cut for presentation.
+      </p>
+      <p>
+        Each clip below shows all four camera angles at once — forward (F),
+        rearward (R) and the two cabin views (SL, SR) — assembled from the
+        synchronised originals without reframing or cropping.
+      </p>
+      <p class="aside">
+        Author and affiliation details are withheld while the paper is under review.
+      </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hidden until SCENARIOS in data/recordings.js is filled in. -->
+  <section class="band band--alt" id="scenarios">
+    <div class="wrap">
+      <h2>Scenarios</h2>
+      <p class="lede">
+        The scenarios driven during the campaign.
+      </p>
+      <div class="table-scroll">
+        <table class="spec-table" id="scenario-table">
+          <caption class="sr-only">Scenario protocol</caption>
+          <thead>
+            <tr>
+              <th scope="col" class="col-code">Code</th>
+              <th scope="col">Scenario</th>
+              <th scope="col" class="col-speed">Target speed</th>
+              <th scope="col" class="col-n">Clips</th>
+            </tr>
+          </thead>
+          <tbody><!-- filled by app.js --></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--dark" id="recordings">
+    <div class="wrap">
+      <h2>Recordings</h2>
+      <p class="lede">
+        Forward and rearward views on the top row, the two cabin views below.
+        Timestamps are the start of each recording.
+      </p>
+
+      <div class="filters" role="group" aria-label="Filter recordings">
+        <div class="filter-row" id="filter-scenario"></div>
+        <div class="filter-row" id="filter-run"></div>
+      </div>
+      <p class="result-line" id="result-line" aria-live="polite">—</p>
+
+      <ul class="grid" id="grid"></ul>
+      <p class="empty" id="empty" hidden>No recording matches this filter.</p>
+    </div>
+  </section>
+
+  <section class="band" id="cite">
+    <div class="wrap">
+      <div class="prose">
+      <h2>Citation</h2>
+      <pre class="bib"><code>@inproceedings{radarad,
+  title     = {RadarAD},
+  author    = {Anonymous},
+  booktitle = {Under review},
+  year      = {2027}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Supplementary material for an anonymous conference submission.</p>
+  </div>
+</footer>
+
+<script src="data/recordings.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

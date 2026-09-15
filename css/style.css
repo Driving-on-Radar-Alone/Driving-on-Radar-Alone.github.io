@@ -577,7 +577,9 @@ figcaption {
   border: 1px solid var(--line); color: var(--ink-2);
 }
 .badge--sc { border-color: var(--accent); color: var(--accent); }
-.badge--comfort { background: var(--accent); border-color: var(--accent); color: #fff; }
+.badge--radar { background: var(--accent); border-color: var(--accent); color: #fff; }
+.badge--lidar { border-color: var(--ink-2); color: var(--ink); }
+.badge--gnss  { border-style: dotted; }
 .badge--todo { border-style: dashed; color: var(--ink-3); }
 .card-note { margin: 0; color: var(--ink-2); font-size: .87rem; line-height: 1.5; }
 

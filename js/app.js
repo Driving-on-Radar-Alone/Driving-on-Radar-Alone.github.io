@@ -1,4 +1,4 @@
-/* RadarAD project page — builds the scenario table and the recording grid
+/* Driving on Radar Alone project page — builds the scenario table and the recording grid
    from data/recordings.js. Edit that file, not this one. */
 (function () {
   "use strict";
@@ -9,7 +9,14 @@
   var byCode = {};
   scenarios.forEach(function (s) { byCode[s.code] = s; });
 
-  var RUN_LABEL = { baseline: "baseline", comfort: "comfort" };
+  // Localization source of the run, as read from the matching rosbag.
+  var RUNS = [
+    { value: "radar", label: "Radar prior-map" },
+    { value: "lidar", label: "LiDAR prior-map" },
+    { value: "gnss",  label: "GNSS/INS" }
+  ];
+  var RUN_LABEL = {};
+  RUNS.forEach(function (r) { RUN_LABEL[r.value] = r.label; });
 
   function mmss(sec) {
     var s = Math.round(sec || 0);
@@ -139,11 +146,11 @@
     buildChips(document.getElementById("filter-scenario"), scItems, "scenario");
   }
 
-  var nBase = recs.filter(function (r) { return r.run === "baseline"; }).length;
-  var nComf = recs.filter(function (r) { return r.run === "comfort"; }).length;
-  var runItems = [{ value: "all", label: "Both runs", n: recs.length }];
-  if (nBase) runItems.push({ value: "baseline", label: "Baseline", n: nBase });
-  if (nComf) runItems.push({ value: "comfort", label: "Comfort", n: nComf });
+  var runItems = [{ value: "all", label: "All sources", n: recs.length }];
+  RUNS.forEach(function (r) {
+    var n = recs.filter(function (x) { return x.run === r.value; }).length;
+    if (n) runItems.push({ value: r.value, label: r.label, n: n });
+  });
   if (runItems.length > 1) {
     buildChips(document.getElementById("filter-run"), runItems, "run");
   }
@@ -186,7 +193,7 @@
       badges.appendChild(el("span", "badge badge--" + r.run, RUN_LABEL[r.run] || r.run));
     }
     if (r.speed !== "" && r.speed != null) {
-      badges.appendChild(el("span", "badge", r.speed + " km/h"));
+      badges.appendChild(el("span", "badge", r.speed + " km/h peak"));
     }
     if (r.side) badges.appendChild(el("span", "badge", r.side));
     meta.appendChild(badges);

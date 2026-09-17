@@ -80,5 +80,4 @@ const RECORDINGS = [
   { id: "MAN_20260911_150802", clock: "15:08:02", seconds: 47, scenario: "S4", run: "lidar", speed: 17, side: "", note: "", hidden: false },
   { id: "MAN_20260911_150952", clock: "15:09:52", seconds: 60, scenario: "S5", run: "lidar", speed: 77, side: "", note: "", hidden: false },
   { id: "MAN_20260911_151428", clock: "15:14:28", seconds: 60, scenario: "S6", run: "lidar", speed: 48, side: "", note: "", hidden: false },
-  { id: "MAN_20260911_164227", clock: "16:42:27", seconds: 60, scenario: "",   run: "gnss",  speed: 10, side: "", note: "Low-speed reference run on GNSS/INS localization.", hidden: false },
 ];

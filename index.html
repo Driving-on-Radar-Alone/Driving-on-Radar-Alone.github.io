@@ -140,44 +140,20 @@
       <h2>Method</h2>
 
       <div class="mcol">
-        <h3 class="sub">One interface changes</h3>
-        <p class="note">Radar localization runs continuously at 20 Hz, so a
-          selector can hand the controller the radar state without
-          re-initialization. Planning and control never read which source is
-          active. After the initial GNSS pose, degraded-mode estimation uses no
-          LiDAR, camera, IMU, GNSS or CAN measurement.</p>
+        <p class="note">A transition to degraded mode switches perception to
+          radar-only detection and tracking and hands the controller a vehicle
+          state estimated from one 4D radar against a fixed prior radar map.
+          Planning and control are unchanged and never read which source is
+          active. After the initial GNSS pose, the estimator uses no LiDAR,
+          camera, IMU, GNSS or CAN measurement.</p>
       </div>
 
-      <div class="mcol"><h3 class="sub">Doppler-coupled fixed-lag localization</h3></div>
       <figure class="figure figure--wide">
         <img src="figures/fig2_localization.png" width="2200" height="977" loading="lazy"
              alt="Pipeline diagram. Offline: multi-session logs, INS placement, block ICP refinement and voxel consensus produce the prior map. Online at 20 Hz: an initial GNSS pose and each radar scan pass through preprocessing and Doppler velocity estimation into Doppler-GICP against the fixed voxel map, feeding a 21-state sliding-window factor graph whose newest state becomes the vehicle state for planning and control.">
         <figcaption>Offline map building, and the online pipeline that runs on
           every radar scan.</figcaption>
       </figure>
-      <div class="cols cols--2">
-        <div>
-          <h3>Registration and window</h3>
-          <p>Doppler-GICP registers each scan to the fixed map, and a 21-state
-            fixed-lag window couples it to a constant-velocity model. No vertex is
-            anchored, so earlier registrations keep constraining the pose when the
-            newest one is weak.</p>
-        </div>
-        <div>
-          <h3>Motion from the radar alone</h3>
-          <p>Doppler velocities of static returns plus the non-holonomic
-            constraint give longitudinal speed and yaw rate &mdash; no inertial
-            sensing, no wheel odometry.</p>
-        </div>
-      </div>
-
-      <div class="mcol">
-        <h3 class="sub">The prior map</h3>
-        <p class="note">74 sessions placed by INS/GNSS, refined by a bounded ICP
-          pass and reduced by a 0.35 m voxel consensus to 51&thinsp;646 points.
-          Each 5 m voxel stores an RCS-weighted mean and covariance. The map is
-          area-wide, so routes need not be taught individually.</p>
-      </div>
     </div>
   </section>
 

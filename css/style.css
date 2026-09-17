@@ -248,6 +248,7 @@ h3.sub:first-of-type { margin-top: 2rem; }
 .mcol { max-width: var(--measure); margin-inline: auto; }
 .mcol:first-of-type h3.sub { margin-top: 2rem; }
 .figure + .cols, .figure + .mcol { margin-top: 2.4rem; }
+.mcol + .figure { margin-top: 2.2rem; }
 .figure + .lede, .figure + .note { margin-top: 1.6rem; }
 
 .aside {
@@ -325,7 +326,10 @@ h3.sub:first-of-type { margin-top: 2rem; }
 .figure--wide   { max-width: none; }
 
 /* two stacked transition clips above the abstract ------------------------- */
-.reel { display: grid; gap: 1.8rem; max-width: 780px; margin: 0 auto 2.6rem; }
+.reel {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1.6rem;
+  max-width: none; margin: 0 auto 2.8rem;
+}
 .reel-item { margin: 0; }
 .reel-item video {
   display: block; width: 100%; height: auto;
@@ -648,6 +652,9 @@ figcaption {
 }
 @media (max-width: 900px) {
   .cols { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .reel { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
   .cols, .cols--2 { grid-template-columns: 1fr; }

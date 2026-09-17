@@ -323,6 +323,24 @@ h3.sub:first-of-type { margin-top: 2rem; }
 .figure--teaser { max-width: 640px; }
 .figure--mid    { max-width: 780px; }
 .figure--wide   { max-width: none; }
+
+/* two stacked transition clips above the abstract ------------------------- */
+.reel { display: grid; gap: 1.8rem; max-width: 780px; margin: 0 auto 2.6rem; }
+.reel-item { margin: 0; }
+.reel-item video {
+  display: block; width: 100%; height: auto;
+  background: #0c0e11;
+  border: 1px solid var(--line); border-radius: var(--r);
+}
+.reel-item figcaption {
+  margin-top: .7rem; max-width: none;
+  font-size: .9rem; color: var(--ink-2);
+}
+.reel-time {
+  margin-right: .5rem;
+  font-family: var(--mono); font-size: .78rem; font-weight: 500;
+  letter-spacing: .04em; color: var(--accent);
+}
 .figure img {
   display: block;
   width: 100%;

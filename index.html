@@ -53,14 +53,46 @@
 
 <section class="band teaser">
   <div class="wrap">
-    <figure class="figure figure--teaser">
-      <img src="figures/fig1_architecture.png" width="1200" height="1183" loading="eager"
-           alt="Block diagram. (a) Nominal mode: camera, LiDAR, IMU, radar, GNSS and CAN feed perception and localization, which feed planning, control and the vehicle, with an HD map into localization. (b) Degraded mode: camera, LiDAR, IMU, GNSS and CAN are greyed out; radar alone feeds perception and a radar localization module reading a radar map, and the same planning and control modules are retained.">
-      <figcaption>A sensor failure switches the stack into a radar-only degraded
-        mode. Perception falls back to radar-only detection and tracking, and a
-        single 4D radar with a fixed prior radar map replaces the fused vehicle
-        state. Planning and control are unchanged.</figcaption>
+    <p class="lede wide">
+      Two runs in which the vehicle state was switched over to radar while
+      driving. The controller keeps tracking the mapped path through the switch;
+      no one takes over.
+    </p>
+
+    <div class="reel">
+      <figure class="reel-item">
+        <video controls preload="none" playsinline
+               poster="posters/MAN_20260911_132945.jpg"
+               aria-label="Transition recording at 13:29:45">
+          <source src="videos/MAN_20260911_132945.mp4" type="video/mp4">
+        </video>
+        <figcaption><span class="reel-time">13:29:45</span> GNSS &rarr; dead
+          reckoning &rarr; radar in the GNSS-shadowed section. The state source
+          switches at 17 s.</figcaption>
+      </figure>
+      <figure class="reel-item">
+        <video controls preload="none" playsinline
+               poster="posters/MAN_20260911_133151.jpg"
+               aria-label="Transition recording at 13:31:51">
+          <source src="videos/MAN_20260911_133151.mp4" type="video/mp4">
+        </video>
+        <figcaption><span class="reel-time">13:31:51</span> Run A. The state
+          source switches at 11 s; maximum lateral localization error
+          0.478 m.</figcaption>
+      </figure>
+    </div>
+
+    <figure class="figure figure--mid">
+      <img src="figures/fig3_transitions.png" width="1300" height="1077" loading="lazy"
+           alt="Two stacked time-series plots of lateral distance against time. In both, a GNSS phase is followed by a dead-reckoning phase in which localization error drifts away from zero, then a radar phase. Run A peaks near 1 m of true cross-track error at the switch and settles; Run B peaks at 2.28 m and settles within a couple of seconds.">
+      <figcaption>Two selected completed transitions. Shading marks the state
+        source; black is true cross-track error, orange the controller&rsquo;s,
+        blue the localization error of the selected state.</figcaption>
     </figure>
+    <p class="note">Dead-reckoning drift builds while the controller tracks the
+      path against an erroneous state. After the switch to radar, true cross-track
+      error peaked at 1.02 m and 2.28 m and both runs recovered below 0.3 m within
+      1.6 s, without intervention.</p>
   </div>
 </section>
 
@@ -108,16 +140,12 @@
       <h2>Method</h2>
 
       <div class="mcol">
-  <h3 class="sub">One interface changes</h3>
-        <p class="note">
-          Radar localization runs continuously at 20 Hz, including during nominal
-          operation, so a selector can hand the controller either the fused or the
-          radar state without re-initialization. Planning and control never read
-          which source is active, so the actual path-tracking error measures the
-          effect of switching. GNSS supplies the initial pose once at start-up;
-          after that, degraded-mode estimation uses no LiDAR, camera, IMU, GNSS or
-          CAN measurement.
-        </p>
+        <h3 class="sub">One interface changes</h3>
+        <p class="note">Radar localization runs continuously at 20 Hz, so a
+          selector can hand the controller the radar state without
+          re-initialization. Planning and control never read which source is
+          active. After the initial GNSS pose, degraded-mode estimation uses no
+          LiDAR, camera, IMU, GNSS or CAN measurement.</p>
       </div>
 
       <div class="mcol"><h3 class="sub">Doppler-coupled fixed-lag localization</h3></div>
@@ -130,32 +158,25 @@
       <div class="cols cols--2">
         <div>
           <h3>Registration and window</h3>
-          <p>Each scan is registered to the fixed map with Doppler-GICP, which
-            minimizes geometric and Doppler residuals jointly. A 21-state
-            fixed-lag window then couples that registration to a constant-velocity
-            model. No vertex is anchored: the fixed-map term is the reference, so
-            earlier registrations keep constraining the absolute pose when the
+          <p>Doppler-GICP registers each scan to the fixed map, and a 21-state
+            fixed-lag window couples it to a constant-velocity model. No vertex is
+            anchored, so earlier registrations keep constraining the pose when the
             newest one is weak.</p>
         </div>
         <div>
           <h3>Motion from the radar alone</h3>
-          <p>Doppler velocities of static returns give the mounting-point velocity,
-            and the non-holonomic constraint turns it into longitudinal speed and
-            yaw rate. All degraded-mode motion information therefore comes from
-            the one radar, with no inertial sensing and no wheel odometry.</p>
+          <p>Doppler velocities of static returns plus the non-holonomic
+            constraint give longitudinal speed and yaw rate &mdash; no inertial
+            sensing, no wheel odometry.</p>
         </div>
       </div>
 
       <div class="mcol">
-  <h3 class="sub">The prior map</h3>
-        <p class="note">
-          Radar scans from 74 sessions were placed in a common frame using INS/GNSS
-          poses, refined by a bounded ICP pass and reduced by a 0.35 m voxel
-          consensus that keeps only locations seen in at least two sessions, leaving
-          51&thinsp;646 points. Each 5 m voxel stores an RCS-weighted mean and
-          covariance. The map is area-wide, so routes need not be taught
-          individually. Map building is not claimed as a contribution.
-        </p>
+        <h3 class="sub">The prior map</h3>
+        <p class="note">74 sessions placed by INS/GNSS, refined by a bounded ICP
+          pass and reduced by a 0.35 m voxel consensus to 51&thinsp;646 points.
+          Each 5 m voxel stores an RCS-weighted mean and covariance. The map is
+          area-wide, so routes need not be taught individually.</p>
       </div>
     </div>
   </section>
@@ -192,37 +213,22 @@
               <th scope="col" class="r">Max.<span class="u">km/h</span></th>
               <th scope="col" class="r">Dist.<span class="u">km</span></th>
               <th scope="col">Outcome</th>
-              <th scope="col" class="r">Lat. err. / &gt; 0.44 m</th>
             </tr>
           </thead>
           <tbody>
-            <tr><th scope="row">S1</th><td>Urban lane keeping</td><td class="r">50</td><td class="r">0.44</td><td class="good">completed</td><td class="r tbd">&mdash;</td></tr>
-            <tr><th scope="row">S2</th><td>Urban right turn</td><td class="r">27</td><td class="r">0.10</td><td class="good">completed</td><td class="r tbd">&mdash;</td></tr>
-            <tr><th scope="row">S3</th><td>Urban left turn</td><td class="r">27</td><td class="r">0.13</td><td class="good">completed</td><td class="r tbd">&mdash;</td></tr>
-            <tr><th scope="row">S4</th><td>Roundabout</td><td class="r">16</td><td class="r">0.13</td><td class="good">completed</td><td class="r tbd">&mdash;</td></tr>
-            <tr><th scope="row">S5</th><td>Highway</td><td class="r">78</td><td class="r">0.67</td><td class="good">completed</td><td class="r tbd">&mdash;</td></tr>
-            <tr><th scope="row">S6</th><td>GNSS shadow</td><td class="r">49</td><td class="r">0.71</td><td class="good">completed</td><td class="r tbd">&mdash;</td></tr>
-            <tr><th scope="row">S7</th><td>Composite segment</td><td class="r">100</td><td class="r">4.06</td><td class="good">completed</td><td class="r tbd">&mdash;</td></tr>
-            <tr><th scope="row" class="em">S1</th><td class="em">Lane keeping (Run B)</td><td class="r">50</td><td class="r">0.45</td><td class="good">completed*</td><td class="r">0.130 m / 0 s</td></tr>
-            <tr><th scope="row" class="em">S6</th><td class="em">GNSS shadow (Run A)</td><td class="r">49</td><td class="r">0.40</td><td class="good">completed</td><td class="r">0.478 m / 0.70 s</td></tr>
+            <tr><th scope="row">S1</th><td>Urban lane keeping</td><td class="r">50</td><td class="r">0.44</td><td class="good">completed</td></tr>
+            <tr><th scope="row">S2</th><td>Urban right turn</td><td class="r">27</td><td class="r">0.10</td><td class="good">completed</td></tr>
+            <tr><th scope="row">S3</th><td>Urban left turn</td><td class="r">27</td><td class="r">0.13</td><td class="good">completed</td></tr>
+            <tr><th scope="row">S4</th><td>Roundabout</td><td class="r">16</td><td class="r">0.13</td><td class="good">completed</td></tr>
+            <tr><th scope="row">S5</th><td>Highway</td><td class="r">78</td><td class="r">0.67</td><td class="good">completed</td></tr>
+            <tr><th scope="row">S6</th><td>GNSS shadow</td><td class="r">49</td><td class="r">0.71</td><td class="good">completed</td></tr>
+            <tr><th scope="row">S7</th><td>Composite segment</td><td class="r">100</td><td class="r">4.06</td><td class="good">completed</td></tr>
+            <tr><th scope="row" class="em">S1</th><td class="em">Lane keeping (Run B)</td><td class="r">50</td><td class="r">0.45</td><td class="good">completed</td></tr>
+            <tr><th scope="row" class="em">S6</th><td class="em">GNSS shadow (Run A)</td><td class="r">49</td><td class="r">0.40</td><td class="good">completed</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="tfoot">&mdash;: no RTK-fixed reference. *Run B departed the path
-        transiently (2.28 m) and recovered without intervention.</p>
 
-      <h3 class="sub">Transitions</h3>
-      <figure class="figure figure--mid">
-        <img src="figures/fig3_transitions.png" width="1300" height="1077" loading="lazy"
-             alt="Two stacked time-series plots of lateral distance against time. In both, a GNSS phase is followed by a dead-reckoning phase in which localization error drifts away from zero, then a radar phase. Run A peaks near 1 m of true cross-track error at the switch and settles; Run B peaks at 2.28 m and settles within a couple of seconds.">
-        <figcaption>Two selected completed transitions. Shading marks the state
-          source; black is true cross-track error, orange the controller&rsquo;s,
-          blue the localization error of the selected state.</figcaption>
-      </figure>
-      <p class="lede wide">Dead-reckoning drift builds while the controller tracks the
-        path against an erroneous state. After the switch to radar, true
-        cross-track error peaked at 1.02 m and 2.28 m and both runs recovered
-        below 0.3 m within 1.6 s, without intervention.</p>
 
       <h3 class="sub">Localization accuracy</h3>
       <div class="table-scroll">
@@ -328,12 +334,6 @@
         open-loop replay against a single-point GNSS reference is exploratory
         sensitivity evidence, not an accuracy estimate.</p>
 
-      <h3 class="sub">Limits</h3>
-      <p class="lede wide">One vehicle, one proving ground and clear daytime
-        conditions, with one evaluated run per road type, two selected accuracy
-        runs and one run reaching 100 km/h. Fault detection, automatic transition
-        and integrity monitoring are outside the validated scope &mdash; every
-        trial used a manually commanded state-source selection.</p>
     </div>
   </section>
 

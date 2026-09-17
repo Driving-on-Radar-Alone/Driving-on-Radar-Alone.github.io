@@ -9,43 +9,43 @@
 //    group   표를 나누는 머리글. "" 이면 머리글 없이 이어집니다.
 //    title   한 줄 제목
 //    detail  한두 문장 설명
-//    speeds  "40 / 60 / 80" 처럼 문자열. 단위(km/h)는 페이지가 붙입니다.
+//    speeds  Table I 의 최고 도달 속도. 단위(km/h)는 페이지가 붙입니다.
 
 const SCENARIOS = [
   { code: "S1", group: "",
     title: "Urban lane keeping",
-    detail: "Lane keeping along the urban block grid, 490 m. The only scenario carrying a strict direct R-versus-L1 comparison, aligned by scenario and speed across sessions; L1 covers it from a mid-course point only, about 200 m, at 20 and 40 km/h.",
-    speeds: "20 \u2013 50" },
+    detail: "Lane keeping along the urban block grid. Evaluated segment 0.44 km, completed without intervention.",
+    speeds: "50" },
 
   { code: "S2", group: "",
     title: "Urban right turn",
-    detail: "Right turn at an urban intersection. Auxiliary descriptive result with disclosed condition imbalance; one R run.",
-    speeds: "" },
+    detail: "Right turn at an urban intersection. Evaluated segment 0.10 km, completed without intervention.",
+    speeds: "27" },
 
   { code: "S3", group: "",
     title: "Urban left turn",
-    detail: "Left turn at an urban intersection. Auxiliary descriptive result with disclosed condition imbalance; one R run.",
-    speeds: "" },
+    detail: "Left turn at an urban intersection. Evaluated segment 0.13 km, completed without intervention.",
+    speeds: "27" },
 
   { code: "S4", group: "",
     title: "Roundabout",
-    detail: "The 67 m roundabout, driven as its own scenario. One R run; not driven by L1.",
-    speeds: "" },
+    detail: "The roundabout, entered and driven through. Evaluated segment 0.13 km, completed without intervention.",
+    speeds: "16" },
 
   { code: "S5", group: "",
     title: "Highway",
-    detail: "The expressway section, 700\u2013890 m, driven in both directions. The five R runs mix speeds across the range rather than repeating one condition, and are reported as a median with the min\u2013max range. L1 failed or aborted here.",
-    speeds: "40 / 60 / 80" },
+    detail: "The expressway section. Evaluated segment 0.67 km, completed without intervention.",
+    speeds: "78" },
 
   { code: "S6", group: "",
-    title: "GNSS-shadowed zone",
-    detail: "The roofed 135 m corridor, entered with a roundabout U-turn. Two of the three RTK-fixed degraded runs are here, one of which failed to initialize and stays in the denominator. Not driven by L1.",
-    speeds: "" },
+    title: "GNSS shadow",
+    detail: "The GNSS-shadowed section, entered with a roundabout U-turn. Evaluated segment 0.71 km, completed without intervention. Run A, one of the two RTK-referenced transitions, was driven here.",
+    speeds: "49" },
 
   { code: "S7", group: "",
-    title: "Full course",
-    detail: "All domains chained into one 4.78 km drive. Driven by R only; L1 failed or aborted.",
-    speeds: "up to 100" },
+    title: "Composite segment",
+    detail: "All road types chained into one route. Evaluated segment 4.06 km, completed without intervention; reached 100 km/h once.",
+    speeds: "100" },
 ];
 
 //  각 클립의 시나리오는 같은 주행의 rosbag 에서 확인한 값입니다
@@ -70,9 +70,9 @@ const RECORDINGS = [
   { id: "MAN_20260911_114040", clock: "11:40:40", seconds: 60, scenario: "S7", run: "radar", speed: 50, side: "", note: "First of the four logs that make up the full-course run; it reaches 100 km/h later on.", hidden: false },
   { id: "MAN_20260911_115118", clock: "11:51:18", seconds: 60, scenario: "",   run: "radar", speed: 44, side: "", note: "945 m transit from the north loop down to the shadow-zone roundabout.", hidden: false },
   { id: "MAN_20260911_115735", clock: "11:57:35", seconds: 60, scenario: "S7", run: "lidar", speed: 51, side: "", note: "First of the three logs of the LiDAR full-course run; it reaches 101 km/h later on.", hidden: false },
-  { id: "MAN_20260911_132945", clock: "13:29:45", seconds: 60, scenario: "S6", run: "radar", speed: 47, side: "", note: "Mode switch at 17 s. This is the run that failed to initialize.", hidden: false },
-  { id: "MAN_20260911_133151", clock: "13:31:51", seconds: 60, scenario: "S6", run: "radar", speed: 50, side: "", note: "Mode switch at 11 s, then 28.7 s of radar-only driving.", hidden: false },
-  { id: "MAN_20260911_133335", clock: "13:33:35", seconds: 59, scenario: "S1", run: "radar", speed: 50, side: "", note: "Mode switch at 5 s, then 37.2 s of radar-only driving.", hidden: false },
+  { id: "MAN_20260911_132945", clock: "13:29:45", seconds: 60, scenario: "S6", run: "radar", speed: 47, side: "", note: "Mode switch at 17 s. Not one of the two runs reported in the paper.", hidden: false },
+  { id: "MAN_20260911_133151", clock: "13:31:51", seconds: 60, scenario: "S6", run: "radar", speed: 50, side: "", note: "Run A in the paper. Mode switch at 11 s; maximum lateral localization error 0.478 m.", hidden: false },
+  { id: "MAN_20260911_133335", clock: "13:33:35", seconds: 59, scenario: "S1", run: "radar", speed: 50, side: "", note: "Run B in the paper. Mode switch at 5 s; maximum lateral localization error 0.130 m, and a transient 2.28 m path departure that recovered.", hidden: false },
   { id: "MAN_20260911_150113", clock: "15:01:13", seconds: 60, scenario: "",   run: "lidar", speed: "", side: "", note: "Stationary warm-up while the GNSS reference converged.", hidden: false },
   { id: "MAN_20260911_150259", clock: "15:02:59", seconds: 58, scenario: "S1", run: "lidar", speed: 51, side: "", note: "", hidden: false },
   { id: "MAN_20260911_150435", clock: "15:04:35", seconds: 43, scenario: "S3", run: "lidar", speed: 29, side: "left", note: "", hidden: false },

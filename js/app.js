@@ -53,9 +53,11 @@
     || document.getElementById("scenarios");
   if (!scenarios.length && scenarioSection) scenarioSection.hidden = true;
 
+  // The scenario table is optional: the page may present the road types as a
+  // static table instead, in which case #scenario-list is absent.
   var list = document.getElementById("scenario-list");
   var lastGroup = null;
-  scenarios.forEach(function (s) {
+  if (list) scenarios.forEach(function (s) {
     if (s.group && s.group !== lastGroup) {
       lastGroup = s.group;
       var g = el("li", "sc-group", s.group);

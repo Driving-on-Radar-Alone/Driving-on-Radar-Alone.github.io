@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Radar-Only Fail-Operational Autonomous Driving</title>
-<meta name="description" content="Radar-only fail-operational autonomous driving: control-consumable 4D radar localization on a radar-native prior map, closed loop on an on-road passenger car.">
+<meta name="description" content="Radar-only fail-operational autonomous driving: closed-loop on-road validation with prior-map 4D radar localization on a passenger car.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 
 <header class="hero">
   <div class="wrap">
-    <p class="eyebrow">Anonymous submission · under review</p>
+    <p class="eyebrow">Anonymous submission &middot; under review</p>
     <h1 class="hero-title hero-title--long">Radar-Only Fail-Operational
       Autonomous&nbsp;Driving</h1>
     <p class="hero-sub">Closed-Loop On-Road Validation with 4D Radar Localization</p>
@@ -26,8 +26,7 @@
     <!-- TODO  Activate a button by giving it a real href and deleting its
          aria-disabled attribute, e.g.
            <a class="btn" href="https://anonymous.4open.science/r/xxxx/">…</a>
-         Keep every link anonymous while the paper is under review: no personal
-         GitHub account, no institute page, no YouTube channel. -->
+         Keep every link anonymous while the paper is under review. -->
     <div class="links">
       <a class="btn" href="#" aria-disabled="true">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 2.5L17.5 8H14V4.5zM8 13h8v1.5H8V13zm0 3.5h8V18H8v-1.5zM8 9.5h4V11H8V9.5z"/></svg>
@@ -48,16 +47,26 @@
       <div><dt>Site</dt><dd>K-City</dd></div>
       <div><dt>Road types</dt><dd>7, all completed</dd></div>
       <div><dt>Top speed</dt><dd>100 km/h</dd></div>
-      <div><dt>Recordings</dt><dd><span id="spec-count">—</span></dd></div>
-      <div><dt>Footage</dt><dd><span id="spec-mins">—</span></dd></div>
     </dl>
   </div>
 </header>
 
+<section class="band teaser">
+  <div class="wrap">
+    <figure class="figure figure--teaser">
+      <img src="figures/fig1_architecture.png" width="1200" height="1183" loading="eager"
+           alt="Block diagram. (a) Nominal mode: camera, LiDAR, IMU, radar, GNSS and CAN feed perception and localization, which feed planning, control and the vehicle, with an HD map into localization. (b) Degraded mode: camera, LiDAR, IMU, GNSS and CAN are greyed out; radar alone feeds perception and a radar localization module reading a radar map, and the same planning and control modules are retained.">
+      <figcaption>A sensor failure switches the stack into a radar-only degraded
+        mode. Perception falls back to radar-only detection and tracking, and a
+        single 4D radar with a fixed prior radar map replaces the fused vehicle
+        state. Planning and control are unchanged.</figcaption>
+    </figure>
+  </div>
+</section>
+
 <nav class="secnav" aria-label="Sections">
   <div class="wrap secnav-inner">
     <a href="#abstract">Abstract</a>
-    <a href="#introduction">Introduction</a>
     <a href="#method">Method</a>
     <a href="#experiments">Experiments</a>
     <a href="#videos">Videos</a>
@@ -67,7 +76,6 @@
 
 <main>
 
-  <!-- ===================================================== ABSTRACT ======= -->
   <!-- ===================================================== ABSTRACT ======= -->
   <section class="band" id="abstract">
     <div class="wrap">
@@ -91,228 +99,93 @@
           establishing autonomous fault recovery or a validated operating
           envelope.</p>
       </div>
-
-      <figure class="figure figure--wide">
-        <img src="figures/fig1_architecture.png" width="1200" height="1183" loading="lazy"
-             alt="Block diagram. (a) Nominal mode: camera, LiDAR, IMU, radar, GNSS and CAN feed perception and localization, which feed planning, control and the vehicle, with an HD map into localization. (b) Degraded mode: camera, LiDAR, IMU, GNSS and CAN are greyed out; radar alone feeds perception and a radar localization module that reads a radar map, and the same planning and control modules are retained.">
-        <figcaption><b>Fig. 1.</b> Nominal multi-sensor mode (a) and proposed
-          radar-only degraded mode (b). Light modules are retained; dark blocks
-          within the red dashed box show radar localization and its prior map.
-          Greyed inputs are excluded from radar-only state estimation. Perception
-          switches to radar-only MODT in degraded mode. The mode-transition arrow
-          is conceptual: the experiments used an external manual command, without
-          automatic fault detection or switching.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- ================================================= INTRODUCTION ======= -->
-  <section class="band band--alt" id="introduction">
-    <div class="wrap">
-      <h2>Introduction</h2>
-      <div class="prose justify">
-        <p>Autonomous driving stacks combine GNSS, IMU, LiDAR and cameras, and a
-          sensor failure can interrupt planning and control. A fail-operational
-          degraded mode should preserve the essential functions needed for lane
-          keeping, deceleration and a safe stop. Enabling a sensor already on the
-          vehicle to perform several functions through software offers an
-          alternative to adding redundant hardware. Radar directly measures range
-          and relative velocity, is insensitive to illumination, and is robust in
-          adverse weather.</p>
-        <p>Radar ego-motion estimation and mapping are well established, prior-map
-          localization has achieved decimetre-level accuracy on recorded logs, and
-          radar-based closed-loop navigation has been demonstrated on other
-          platforms. Three questions remain for an on-road passenger car. First,
-          radar-only vehicle-state estimation needs validation inside an existing
-          perception&ndash;planning&ndash;control stack rather than on recorded
-          data. Second, control requires localization that is both accurate and
-          temporally stable, because sparse scans, multipath and failed
-          registration produce errors and discontinuities that reach steering
-          directly. Third, the integration requires an empirical operational
-          design domain (ODD) assessment that reports performance on specific road
-          types and at tested speeds.</p>
-      </div>
-      <div class="prose">
-        <ul class="odd-list contrib">
-          <li><span class="odd-key">Closed loop</span> Radar-only closed-loop
-            driving with an existing on-road stack: radar-only MODT and
-            vehicle-state estimates from a single 4D radar and prior radar map
-            maintain driving on urban roads, a roundabout, a highway and a
-            GNSS-shadowed section. Two selected completed demonstrations show
-            recovery after manually commanded state-source transitions; they do
-            not establish a transition success rate.</li>
-          <li><span class="odd-key">Localizer</span> Doppler-coupled fixed-lag
-            prior-map localization validated in closed loop. The estimator adapts
-            an inherited Doppler&ndash;window structure to a fixed map; offline
-            component removal examines relative error and severe estimation
-            failures.</li>
-          <li><span class="odd-key">ODD</span> An empirical ODD assessment that
-            jointly reports per-road-type outcomes, tested speeds, errors relative
-            to the localization reference line, and observed degradation and
-            replay failures. These observations do not define validated operating
-            limits.</li>
-        </ul>
-        <p class="notice"><strong>Out of scope.</strong> Map building is not
-          claimed as a contribution, and the registration algorithm itself is
-          inherited. Fault detection, automatic transition and integrity
-          monitoring lie outside the validated scope &mdash; every trial used a
-          manually commanded state-source selection.</p>
-      </div>
     </div>
   </section>
 
   <!-- ======================================================= METHOD ======= -->
-  <section class="band" id="method">
+  <section class="band band--alt" id="method">
     <div class="wrap">
       <h2>Method</h2>
 
-      <h3 class="sub">Architecture</h3>
-      <p class="lede wide">
-        A transition to degraded mode switches perception to radar-only MODT while
-        retaining the existing planning and control modules.
-      </p>
-      <div class="cols cols--2">
-        <div>
-          <h3>One interface changes</h3>
-          <p>Radar localization runs continuously at 20 Hz, including during
-            nominal operation. Its vehicle-referenced, latency-compensated output
-            enters a bridge that holds the latest state at 100 Hz, and a selector
-            supplies either the fused or the radar state at 50 Hz as
-            (<i>x</i>, <i>y</i>, &psi;, <i>v<sub>x</sub></i>,
-            <i>v<sub>y</sub></i>, &omega;). An external HMI signal changes the
-            source without re-initialization.</p>
-        </div>
-        <div>
-          <h3>The stack does not know</h3>
-          <p>Planning and control do not read the source flag, so the actual
-            path-tracking error measures the effect of switching sources. GNSS
-            supplies the initial pose once at start-up; thereafter degraded-mode
-            state estimation uses no LiDAR, camera, IMU, GNSS or CAN measurement.
-            CAN carries actuator commands and instrumentation only.</p>
-        </div>
+      <div class="mcol">
+  <h3 class="sub">One interface changes</h3>
+        <p class="note">
+          Radar localization runs continuously at 20 Hz, including during nominal
+          operation, so a selector can hand the controller either the fused or the
+          radar state without re-initialization. Planning and control never read
+          which source is active, so the actual path-tracking error measures the
+          effect of switching. GNSS supplies the initial pose once at start-up;
+          after that, degraded-mode estimation uses no LiDAR, camera, IMU, GNSS or
+          CAN measurement.
+        </p>
       </div>
 
-      <h3 class="sub">Prior radar map and radar-only localization</h3>
+      <div class="mcol"><h3 class="sub">Doppler-coupled fixed-lag localization</h3></div>
       <figure class="figure figure--wide">
         <img src="figures/fig2_localization.png" width="2200" height="977" loading="lazy"
-             alt="Pipeline diagram. Offline row: multi-session logs, INS placement, block ICP refinement and voxel consensus produce the prior map. Online row at 20 Hz: an initial GNSS pose and each radar scan go through preprocessing and Doppler velocity estimation into Doppler-GICP against the fixed voxel map, feeding a 21-state sliding-window factor graph whose newest state is converted by lever arm and latency compensation into the vehicle state for planning and control.">
-        <figcaption><b>Fig. 2.</b> Prior-map radar localization. Top: offline map
-          building using INS/GNSS poses, bounded ICP refinement and multi-session
-          voxel consensus. Bottom: online preprocessing, Doppler velocity
-          estimation, fixed-map Doppler-GICP and a 21-state fixed-lag graph.
-          Squares, diamonds and filled circles denote map, Doppler and
-          constant-velocity factors. GNSS initializes the pose once; lever-arm and
-          latency compensation yield the vehicle-state output.</figcaption>
+             alt="Pipeline diagram. Offline: multi-session logs, INS placement, block ICP refinement and voxel consensus produce the prior map. Online at 20 Hz: an initial GNSS pose and each radar scan pass through preprocessing and Doppler velocity estimation into Doppler-GICP against the fixed voxel map, feeding a 21-state sliding-window factor graph whose newest state becomes the vehicle state for planning and control.">
+        <figcaption>Offline map building, and the online pipeline that runs on
+          every radar scan.</figcaption>
       </figure>
-      <div class="cols">
+      <div class="cols cols--2">
         <div>
-          <h3>The map</h3>
-          <p>Radar scans from 74 sessions were placed in a common frame using
-            INS/GNSS poses. A single ICP refinement pass against an earlier map
-            used at most five iterations, bounded by 0.25 m and 0.5&deg;. A 0.35 m
-            voxel consensus retained locations observed in at least two sessions,
-            producing 51&thinsp;646 map points. Each 5 m voxel stores an
-            RCS-weighted mean and covariance, with shrinkage and eigenvalue bounds
-            preventing degenerate voxels from being over-weighted. The map is
-            area-wide, so routes need not be taught individually.</p>
+          <h3>Registration and window</h3>
+          <p>Each scan is registered to the fixed map with Doppler-GICP, which
+            minimizes geometric and Doppler residuals jointly. A 21-state
+            fixed-lag window then couples that registration to a constant-velocity
+            model. No vertex is anchored: the fixed-map term is the reference, so
+            earlier registrations keep constraining the absolute pose when the
+            newest one is weak.</p>
         </div>
         <div>
-          <h3>The front end</h3>
-          <p>Preprocessing keeps returns within 1&ndash;100 m, &plusmn;5&deg;
-            elevation and &plusmn;60&deg; azimuth, and retains only the nearest
-            return per 0.5&deg; azimuth bin, because a more distant return at the
-            same azimuth is often a multipath reflection. RANSAC and iteratively
-            reweighted least squares estimate the mounting-point velocity from
-            static returns; the non-holonomic constraint then yields longitudinal
-            speed and yaw rate, so all degraded-mode motion information comes from
-            the single radar.</p>
-        </div>
-        <div>
-          <h3>The window</h3>
-          <p>Registration starts from a constant-velocity prediction and minimizes
-            geometric and Doppler residuals jointly against the fixed map, with
-            &lambda;&nbsp;=&nbsp;0.7 weighting the two terms and a 10&deg; yaw
-            innovation gate rejecting bad registrations. A fixed-lag window of 21
-            states is optimized with g2o. No vertex is fixed: the fixed-map unary
-            provides the reference, unlike an odometry window that anchors its
-            first vertex, and earlier registrations keep constraining the absolute
-            pose when the newest one is weak.</p>
+          <h3>Motion from the radar alone</h3>
+          <p>Doppler velocities of static returns give the mounting-point velocity,
+            and the non-holonomic constraint turns it into longitudinal speed and
+            yaw rate. All degraded-mode motion information therefore comes from
+            the one radar, with no inertial sensing and no wheel odometry.</p>
         </div>
       </div>
-      <p class="note">The newest vertex is referenced to the radar mounting point,
-        so a lever-arm transform converts it to the rear-axle centre. The scan
-        timestamp lags the observation by 0.113 s, calibrated in August and not
-        retuned on the evaluation runs; the localizer subtracts this offset and
-        publishes a state predicted forward with a constant turn rate and velocity
-        model at about 20 Hz.</p>
 
-      <!-- ---------------------------------------------------- test site --- -->
-      <h3 class="sub" id="site">Test site and operational design domain</h3>
-      <p class="lede wide">
-        All runs took place at K-City, an autonomous-driving proving ground in
-        Hwaseong-si, Republic of Korea.
-      </p>
-      <figure class="figure figure--wide">
-        <img src="figures/kcity_odd.jpg" alt="Satellite view of the K-City proving ground with four operational design domains outlined: urban, highway, shadow zone and roundabout" loading="lazy" width="1600" height="925">
-      </figure>
-      <div class="site-notes site-notes--cols">
-        <div>
-          <p>The seven road types are laid over four domains of the course. The
-            urban block grid and its arterials carry lane keeping and the right-
-            and left-turn scenarios; the roundabout and the expressway section are
-            driven as their own scenarios; and the roofed corridor is the
-            GNSS-shadowed section. The composite segment chains all of them into a
-            single 4.06 km drive.</p>
-          <p>Speed limits were 50 km/h on urban sections and 100 km/h on the
-            highway. The speeds below describe the tested envelope, not a
-            validated operating limit.</p>
-        </div>
-        <ul class="odd-list">
-          <li><span class="odd-key">Urban</span> Block grid and multi-lane
-            arterials, 535 &times; 145 m</li>
-          <li><span class="odd-key">Highway</span> Expressway section,
-            939 m</li>
-          <li><span class="odd-key">Shadow zone</span> Roofed corridor,
-            135 m</li>
-          <li><span class="odd-key">Roundabout</span> 67 m across</li>
-        </ul>
-      </div>
-      <p class="credit credit--block">North is to the right; each magnified panel carries its own scale bar. Satellite imagery:
-         VWorld, Ministry of Land, Infrastructure and Transport, Republic of Korea.</p>
-
-      <!-- ---------------------------------------------------- scenarios --- -->
-      <div id="scenario-block">
-        <h3 class="sub">Road types</h3>
-        <p class="lede wide">
-          The seven road types of the ODD assessment, with the maximum speed
-          reached on each.
+      <div class="mcol">
+  <h3 class="sub">The prior map</h3>
+        <p class="note">
+          Radar scans from 74 sessions were placed in a common frame using INS/GNSS
+          poses, refined by a bounded ICP pass and reduced by a 0.35 m voxel
+          consensus that keeps only locations seen in at least two sessions, leaving
+          51&thinsp;646 points. Each 5 m voxel stores an RCS-weighted mean and
+          covariance. The map is area-wide, so routes need not be taught
+          individually. Map building is not claimed as a contribution.
         </p>
-        <ol class="sc-list" id="scenario-list"><!-- filled by app.js --></ol>
       </div>
     </div>
   </section>
 
   <!-- ================================================== EXPERIMENTS ======= -->
-  <section class="band band--alt" id="experiments">
+  <section class="band" id="experiments">
     <div class="wrap">
       <h2>Experiments</h2>
-      <div class="prose justify">
-        <p>A drive-by-wire mid-size passenger car was tested on public-road-type
-          courses at K-City, with a forward-mounted Continental ARS548 4D radar
-          (20 Hz, about 284 points per scan) and a prior map built in separate
-          sessions. A NovAtel OEM7 INS/GNSS provided the reference; absolute pose
-          accuracy was evaluated only with RTK-fixed positioning. Localization took
-          2&ndash;3 ms per scan on the vehicle computer, and the median
-          state-message age at the controller input was 33 ms. The lateral error
-          reference is the 0.44 m alert limit for a mid-size vehicle from Reid
-          <i>et al.</i>; it contextualizes the results without implying integrity
-          assurance.</p>
-      </div>
+      <p class="lede wide">
+        A drive-by-wire mid-size passenger car on public-road-type courses at
+        K-City, with one forward-mounted ARS548 4D radar and a prior map built in
+        separate sessions. A NovAtel OEM7 INS/GNSS is the reference; absolute
+        accuracy is scored only where it held an RTK fix.
+      </p>
+
+      <figure class="figure figure--wide">
+        <img src="figures/kcity_odd.jpg" width="1600" height="925" loading="lazy"
+             alt="Satellite view of the K-City proving ground with four operational design domains outlined: urban, highway, shadow zone and roundabout, each with a magnified panel below.">
+        <figcaption>The four domains of the course. North is to the right; each
+          magnified panel carries its own scale bar. Satellite imagery: VWorld,
+          Ministry of Land, Infrastructure and Transport, Republic of
+          Korea.</figcaption>
+      </figure>
 
       <h3 class="sub">Driving outcomes</h3>
+      <p class="lede wide">Seven evaluated road-type segments, then the two selected
+        completed transitions. Speeds describe the tested envelope, not a
+        validated limit.</p>
       <div class="table-scroll">
         <table class="rtable">
-          <caption class="tcap">Table I &mdash; evaluated road-type segments (upper) and the two selected completed transitions (lower).</caption>
           <thead>
             <tr>
               <th scope="col">ID</th><th scope="col">Road type</th>
@@ -335,39 +208,25 @@
           </tbody>
         </table>
       </div>
-      <p class="tfoot">Last column: maximum lateral localization error and the time
-        spent above the 0.44 m reference line; &mdash; means no RTK-fixed pose
-        reference was available. *Run B had a transient departure (maximum true
-        cross-track error 2.28 m) and recovered without intervention.</p>
+      <p class="tfoot">&mdash;: no RTK-fixed reference. *Run B departed the path
+        transiently (2.28 m) and recovered without intervention.</p>
 
-      <h3 class="sub">Transition continuity</h3>
-      <figure class="figure figure--wide">
+      <h3 class="sub">Transitions</h3>
+      <figure class="figure figure--mid">
         <img src="figures/fig3_transitions.png" width="1300" height="1077" loading="lazy"
              alt="Two stacked time-series plots of lateral distance against time. In both, a GNSS phase is followed by a dead-reckoning phase in which localization error drifts away from zero, then a radar phase. Run A peaks near 1 m of true cross-track error at the switch and settles; Run B peaks at 2.28 m and settles within a couple of seconds.">
-        <figcaption><b>Fig. 3.</b> Two selected completed transitions (top: Run A,
-          S6; bottom: Run B, S1). Shading identifies the state source. Black: true
-          cross-track error; orange: controller cross-track error; blue:
-          localization error <i>e</i> of the selected state, with controller
-          CTE&nbsp;=&nbsp;true CTE&nbsp;+&nbsp;<i>e</i>. Run B has no GNSS-segment
-          time series.</figcaption>
+        <figcaption>Two selected completed transitions. Shading marks the state
+          source; black is true cross-track error, orange the controller&rsquo;s,
+          blue the localization error of the selected state.</figcaption>
       </figure>
-      <div class="prose justify">
-        <p>Dead-reckoning drift accumulates while the controller tracks the path
-          relative to an erroneous state. After switching to radar, true
-          cross-track error peaked at 1.02 m and 2.28 m in Runs A and B; both
-          recovered below 0.3 m within 1.6 s without intervention. Run B exceeded
-          the 2 m departure threshold despite completing the run. The relation
-          controller CTE&nbsp;=&nbsp;true CTE&nbsp;+&nbsp;<i>e</i> held with a
-          residual RMS of 1&ndash;2 cm. The 95th-percentile true cross-track error
-          during radar operation was 0.57 m and 0.17 m for Runs A and B, compared
-          with 0.19&ndash;0.35 m in six separate RTK-referenced LiDAR
-          particle-filter runs.</p>
-      </div>
+      <p class="lede wide">Dead-reckoning drift builds while the controller tracks the
+        path against an erroneous state. After the switch to radar, true
+        cross-track error peaked at 1.02 m and 2.28 m and both runs recovered
+        below 0.3 m within 1.6 s, without intervention.</p>
 
       <h3 class="sub">Localization accuracy</h3>
       <div class="table-scroll">
         <table class="rtable">
-          <caption class="tcap">Table II &mdash; reference-based state accuracy over the two completed RTK-referenced transitions.</caption>
           <thead>
             <tr>
               <th scope="col">Source / run</th>
@@ -387,37 +246,14 @@
           </tbody>
         </table>
       </div>
-      <div class="table-scroll">
-        <table class="rtable">
-          <thead>
-            <tr>
-              <th scope="col">Radar run</th>
-              <th scope="col" class="r">Long. RMSE<span class="u">m</span></th>
-              <th scope="col" class="r">Long. bias<span class="u">m</span></th>
-              <th scope="col" class="r">Heading RMSE<span class="u">deg</span></th>
-              <th scope="col" class="r">Speed RMS<span class="u">m/s</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">A (S6)</th><td class="r">0.244</td><td class="r">&minus;0.185</td><td class="r">0.374</td><td class="r">0.0168</td></tr>
-            <tr><th scope="row">B (S1)</th><td class="r">0.254</td><td class="r">&minus;0.143</td><td class="r">0.643</td><td class="r">0.0306</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="tfoot">Radar spans include observer operation. Run A exceeded
-        0.44 m for 0.70 s near the roundabout; Run B remained below it. Their
-        lateral p95 values of 0.395 / 0.122 m were respectively above and below the
-        cited 0.15 m accuracy requirement, so these two runs do not establish
-        compliance with the full localization requirements. Pooled 2D RMSE was
-        0.28 m. Longitudinal errors were substantial, consistent with weak
-        along-track observability. Absolute accuracy is below leading prior
-        results, although differences in sensors and conditions preclude direct
-        ranking.</p>
+      <p class="tfoot">Pooled 2D RMSE 0.28 m. Longitudinal errors were substantial
+        (RMSE 0.24&ndash;0.25 m, bias &minus;0.19 / &minus;0.14 m), consistent with
+        weak along-track observability. Two runs do not establish compliance with
+        the full localization requirements.</p>
 
       <h3 class="sub">Temporal stability</h3>
       <div class="table-scroll">
         <table class="rtable">
-          <caption class="tcap">Table III &mdash; pose step stability, on eligible within-mode samples.</caption>
           <thead>
             <tr>
               <th scope="col">Source</th>
@@ -435,15 +271,12 @@
           </tbody>
         </table>
       </div>
-      <p class="tfoot">Radar had no step mismatch above 0.1 m across spans
-        totalling 6.08 km. The bound concerns measured step mismatch, not every
-        possible discontinuity; the LiDAR-only reference uses a different
-        implementation, session and shorter route.</p>
+      <p class="tfoot">No radar pose step mismatch above 0.1 m across 6.08 km.
+        The LiDAR-only row uses a different implementation, session and route.</p>
 
       <h3 class="sub">Control-side stability</h3>
       <div class="table-scroll">
         <table class="rtable">
-          <caption class="tcap">Table IV &mdash; radar / PF+CAN RMS on eligible 20 Hz samples.</caption>
           <thead>
             <tr>
               <th scope="col">ID</th>
@@ -465,87 +298,62 @@
           </tbody>
         </table>
       </div>
-      <p class="tfoot">The ordering varies by road type and metric, so the results
-        do not establish control equivalence or a consistent advantage. On S5,
-        steering-rate RMS was 4.85 / 4.77&deg;/s over 54.35 / 69.90 s of eligible
-        radar / PF+CAN data; within the short 70&ndash;90 km/h subsets it was
-        2.65 / 2.00&deg;/s, so an aggregate comparison does not remove the
-        high-speed difference. The 20 Hz analysis cannot assess variations above
-        10 Hz.</p>
+      <p class="tfoot">radar / PF+CAN RMS on eligible 20 Hz samples. The ordering
+        varies by road type and metric, so these do not establish control
+        equivalence or a consistent advantage.</p>
 
       <h3 class="sub">Component removal</h3>
       <div class="table-scroll">
         <table class="rtable">
-          <caption class="tcap">Table V &mdash; component-removal sensitivity over 17 paired same-day replays.</caption>
           <thead>
             <tr>
               <th scope="col">Change</th>
               <th scope="col" class="r">Catastr.<span class="u">/17</span></th>
-              <th scope="col" class="r">n&#8710;</th>
-              <th scope="col" class="r">n<sub>s</sub></th>
               <th scope="col" class="r">Med. &#8710;<span class="u">m</span></th>
               <th scope="col" class="r">p<sub>Holm</sub></th>
             </tr>
           </thead>
           <tbody>
-            <tr><th scope="row">N = 1, CV binary off</th><td class="r">4</td><td class="r">17</td><td class="r">13</td><td class="r">+0.015</td><td class="r">0.112</td></tr>
-            <tr><th scope="row">Doppler reg. weight off</th><td class="r">3</td><td class="r">17</td><td class="r">14</td><td class="r">+0.938</td><td class="r em">0.0019</td></tr>
-            <tr><th scope="row">Both of the above</th><td class="r em">14</td><td class="r">17</td><td class="r">3</td><td class="r">+0.595</td><td class="r em">0.0019</td></tr>
-            <tr><th scope="row">Doppler velocity unary off</th><td class="r em">14</td><td class="r">14</td><td class="r">3</td><td class="r">+0.675</td><td class="r em">0.0044</td></tr>
-            <tr><th scope="row">NHC yaw-rate term off</th><td class="r em">9</td><td class="r">11</td><td class="r">8</td><td class="r">&minus;0.017</td><td class="r">0.578</td></tr>
-            <tr><th scope="row">Yaw gate: 10&deg; &rarr; 180&deg;</th><td class="r">0</td><td class="r">17</td><td class="r">17</td><td class="r">+0.008</td><td class="r">0.578</td></tr>
+            <tr><th scope="row">N = 1, CV binary off</th><td class="r">4</td><td class="r">+0.015</td><td class="r">0.112</td></tr>
+            <tr><th scope="row">Doppler reg. weight off</th><td class="r">3</td><td class="r">+0.938</td><td class="r em">0.0019</td></tr>
+            <tr><th scope="row">Both of the above</th><td class="r em">14</td><td class="r">+0.595</td><td class="r em">0.0019</td></tr>
+            <tr><th scope="row">Doppler velocity unary off</th><td class="r em">14</td><td class="r">+0.675</td><td class="r em">0.0044</td></tr>
+            <tr><th scope="row">NHC yaw-rate term off</th><td class="r em">9</td><td class="r">&minus;0.017</td><td class="r">0.578</td></tr>
+            <tr><th scope="row">Yaw gate: 10&deg; &rarr; 180&deg;</th><td class="r">0</td><td class="r">+0.008</td><td class="r">0.578</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="tfoot">Catastrophic: |&#8710;| &gt; 10 m or no valid scored RMSE.
-        Removing Doppler registration weighting worsened all 17 finite pairs;
-        removing the velocity unary produced 14 catastrophic outcomes. These
-        findings support the inherited Doppler constraints, not a new registration
-        algorithm. Cold-start open-loop replay against a single-point GNSS
-        reference provides exploratory sensitivity evidence, not absolute accuracy
-        or closed-loop reliability estimates.</p>
+      <p class="tfoot">17 paired same-day replays; catastrophic means
+        |&#8710;|&nbsp;&gt;&nbsp;10 m or no valid scored RMSE. Cold-start
+        open-loop replay against a single-point GNSS reference is exploratory
+        sensitivity evidence, not an accuracy estimate.</p>
 
-      <h3 class="sub">Observed degradation and limits</h3>
-      <div class="prose justify">
-        <p>Run A&rsquo;s lateral error reached 0.478 m near the south-western
-          roundabout and exceeded 0.44 m for 0.70 s before recovering. Sparse
-          lateral structure is a possible explanation, but correspondence counts
-          were not analysed there. The completed run illustrates localized
-          degradation, not proof of its mechanism.</p>
-        <p>The evidence is limited to one vehicle, one proving ground and clear
-          daytime conditions, with one evaluated run per road type, two selected
-          accuracy runs and one run reaching 100 km/h. Control metrics depend on
-          road type and speed, and the replay study uses a noisy reference. Future
-          work will address integrity monitoring, automatic transition, stronger
-          map constraints in weakly observable areas, repeated trials, and
-          adverse-weather and night-time validation.</p>
-      </div>
+      <h3 class="sub">Limits</h3>
+      <p class="lede wide">One vehicle, one proving ground and clear daytime
+        conditions, with one evaluated run per road type, two selected accuracy
+        runs and one run reaching 100 km/h. Fault detection, automatic transition
+        and integrity monitoring are outside the validated scope &mdash; every
+        trial used a manually commanded state-source selection.</p>
     </div>
   </section>
 
   <!-- ======================================================= VIDEOS ======= -->
-  <section class="band band--dark" id="videos">
+  <section class="band band--alt" id="videos">
     <div class="wrap">
       <h2>Videos</h2>
       <p class="lede wide">
-        Every clip shows all four camera angles at once — forward (F), rearward
-        (R) and the two cabin views (SL, SR) — assembled from the synchronised
-        originals without reframing or cropping. Faces and the recorder's
-        burnt-in text are masked.
-      </p>
-      <p class="lede wide">
-        Each clip is badged with the scenario it belongs to, the localization
-        source that was driving the vehicle, and the peak speed reached in that
-        run. All three come from the log recorded alongside the footage, so the
-        filters below select real runs rather than clip metadata. Two clips sit
-        outside the seven scenarios and are badged accordingly.
+        Each clip shows all four camera angles at once, assembled from the
+        synchronised originals without reframing. Faces and the recorder&rsquo;s
+        burnt-in text are masked. The badges &mdash; road type, localization
+        source and peak speed &mdash; come from the log recorded alongside the
+        footage.
       </p>
 
       <div class="filters" role="group" aria-label="Filter recordings">
         <div class="filter-row" id="filter-scenario"></div>
         <div class="filter-row" id="filter-run"></div>
       </div>
-      <p class="result-line" id="result-line" aria-live="polite">—</p>
+      <p class="result-line" id="result-line" aria-live="polite">&mdash;</p>
 
       <ul class="grid" id="grid"></ul>
       <p class="empty" id="empty" hidden>No recording matches this filter.</p>
@@ -557,7 +365,7 @@
     <div class="wrap">
       <div class="prose">
       <h2>BibTeX</h2>
-      <pre class="bib"><code>@inproceedings{driving_on_radar_alone,
+      <pre class="bib"><code>@inproceedings{radar_only_fail_operational,
   title     = {Radar-Only Fail-Operational Autonomous Driving:
                Closed-Loop On-Road Validation with 4D Radar Localization},
   author    = {Anonymous},

@@ -76,11 +76,14 @@
     </div>
 
     <figure class="figure figure--mid">
-      <img src="figures/fig3_transitions.png" width="1300" height="1077" loading="lazy"
-           alt="Two stacked time-series plots of lateral distance against time. In both, a GNSS phase is followed by a dead-reckoning phase in which localization error drifts away from zero, then a radar phase. Run A peaks near 1 m of true cross-track error at the switch and settles; Run B peaks at 2.28 m and settles within a couple of seconds.">
-      <figcaption>Two selected completed transitions. Shading marks the state
-        source; black is true cross-track error, orange the controller&rsquo;s,
-        blue the localization error of the selected state.</figcaption>
+      <img src="figures/fig3_transitions.png" width="1400" height="1385" loading="lazy"
+           alt="Two stacked time-series plots of lateral distance against time, one per run. Shading splits each run into a nominal mode and a degraded mode, with dashed markers at the emulated sensor fault and at fault detection. Between the two markers the localization error drifts away from zero while true cross-track error grows; Run A peaks near 1 m at the switch and Run B at 2.28 m, both settling within a couple of seconds.">
+      <figcaption>Two selected completed transitions. Shading marks the
+        operating mode; the sensor-fault and fault-detected instants were
+        emulated by manual commands &mdash; the state source fell from GNSS to
+        CAN dead reckoning at the first, and switched to radar-only degraded
+        mode at the second. Black is true cross-track error, orange the
+        controller&rsquo;s, blue the localization error of the selected state.</figcaption>
     </figure>
     <p class="note">Dead-reckoning drift builds while the controller tracks the
       path against an erroneous state. After the switch to radar, true cross-track

@@ -5,7 +5,7 @@
 
   // Clips keep their filenames when they are re-encoded, so a version tag is
   // appended to every media URL to stop browsers serving the previous cut.
-  var MEDIA_V = "?v=2";
+  var MEDIA_V = "?v=3";
 
   var recs = (typeof RECORDINGS !== "undefined" ? RECORDINGS : [])
     .filter(function (r) { return !r.hidden; });

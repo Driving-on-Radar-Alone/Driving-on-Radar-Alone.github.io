@@ -3,6 +3,10 @@
 (function () {
   "use strict";
 
+  // Clips keep their filenames when they are re-encoded, so a version tag is
+  // appended to every media URL to stop browsers serving the previous cut.
+  var MEDIA_V = "?v=2";
+
   var recs = (typeof RECORDINGS !== "undefined" ? RECORDINGS : [])
     .filter(function (r) { return !r.hidden; });
   var scenarios = typeof SCENARIOS !== "undefined" ? SCENARIOS : [];
@@ -169,10 +173,10 @@
     v.controls = true;
     v.preload = "none";
     v.playsInline = true;
-    v.poster = "posters/" + r.id + ".jpg";
+    v.poster = "posters/" + r.id + ".jpg" + MEDIA_V;
     v.setAttribute("aria-label", "Recording " + r.clock);
     var src = document.createElement("source");
-    src.src = "videos/" + r.id + ".mp4";
+    src.src = "videos/" + r.id + ".mp4" + MEDIA_V;
     src.type = "video/mp4";
     v.appendChild(src);
     li.appendChild(v);

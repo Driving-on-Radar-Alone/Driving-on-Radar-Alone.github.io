@@ -55,25 +55,30 @@
     <div class="reel">
       <figure class="reel-item">
         <video controls preload="none" playsinline
-               poster="posters/MAN_20260911_132945.jpg?v=3"
-               aria-label="Transition recording at 13:29:45">
-          <source src="videos/MAN_20260911_132945.mp4?v=3" type="video/mp4">
+               poster="posters/MAN_20260911_132945.jpg?v=4"
+               aria-label="Transition recording at 13:29:45, cameras and on-board RViz">
+          <source src="videos/MAN_20260911_132945.mp4?v=4" type="video/mp4">
         </video>
         <figcaption><span class="reel-time">13:29:45</span> GNSS &rarr; dead
-          reckoning &rarr; radar in the GNSS-shadowed section. The state source
-          switches at 17 s.</figcaption>
+          reckoning &rarr; radar in the GNSS-shadowed section. Watch the
+          Localization source buttons on the RViz panel.</figcaption>
       </figure>
       <figure class="reel-item">
         <video controls preload="none" playsinline
-               poster="posters/MAN_20260911_133151.jpg?v=3"
-               aria-label="Transition recording at 13:31:51">
-          <source src="videos/MAN_20260911_133151.mp4?v=3" type="video/mp4">
+               poster="posters/MAN_20260911_133151.jpg?v=4"
+               aria-label="Run A transition recording at 13:31:51, cameras and on-board RViz">
+          <source src="videos/MAN_20260911_133151.mp4?v=4" type="video/mp4">
         </video>
-        <figcaption><span class="reel-time">13:31:51</span> Run A. The state
-          source switches at 11 s; maximum lateral localization error
-          0.478 m.</figcaption>
+        <figcaption><span class="reel-time">13:31:51</span> Run A. GNSS falls to
+          dead reckoning at 11 s and the switch to radar-only degraded mode
+          follows at 18 s; maximum lateral localization error 0.478 m.</figcaption>
       </figure>
     </div>
+
+    <p class="note">Each clip now runs from the moment autonomous mode engages,
+      which is also when bag recording starts, so its timeline matches the
+      figure below. Left: forward and rear cameras, pedals and driver.
+      Right: the on-board RViz view.</p>
 
     <figure class="figure figure--mid">
       <img src="figures/fig3_transitions_modes.png" width="1400" height="1385" loading="lazy"

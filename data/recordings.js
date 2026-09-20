@@ -66,7 +66,7 @@ const RECORDINGS = [
   { id: "MAN_20260911_113147", clock: "11:31:47", seconds: 47, scenario: "S5", run: "radar", speed: 78, side: "", note: "", hidden: false },
   { id: "MAN_20260911_113325", clock: "11:33:25", seconds: 46, scenario: "S6", run: "radar", speed: 50, side: "", note: "", hidden: false },
   { id: "MAN_20260911_114040", clock: "11:40:40", seconds: 46, scenario: "S7", run: "radar", speed: 50, side: "", note: "", hidden: false },
-  { id: "MAN_20260911_115118", clock: "11:51:18", seconds: 46, scenario: "",   run: "radar", speed: 44, side: "", note: "", hidden: false },
+  { id: "MAN_20260911_115118", clock: "11:51:18", seconds: 46, scenario: "S7", run: "radar", speed: 44, side: "", note: "", hidden: false },
   { id: "MAN_20260911_115735", clock: "11:57:35", seconds: 45, scenario: "S7", run: "lidar", speed: 51, side: "", note: "", hidden: false },
   { id: "MAN_20260911_133151", clock: "13:31:51", seconds: 42, scenario: "S6", run: "radar", speed: 50, side: "", note: "", hidden: false },
   { id: "MAN_20260911_133335", clock: "13:33:35", seconds: 53, scenario: "S1", run: "radar", speed: 50, side: "", note: "", hidden: false },

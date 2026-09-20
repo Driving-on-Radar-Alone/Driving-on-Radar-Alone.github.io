@@ -590,7 +590,7 @@ figcaption {
 .card { display: flex; flex-direction: column; gap: .65rem; }
 .card video {
   display: block; width: 100%; max-width: 100%;
-  aspect-ratio: 3994 / 1080;
+  aspect-ratio: 2710 / 720;   /* the served asset, 4066x1080 scaled to 720p */
   background: #0c0d0f;
   border: 1px solid var(--line);
   border-radius: var(--r);

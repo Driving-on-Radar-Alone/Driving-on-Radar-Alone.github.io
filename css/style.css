@@ -340,9 +340,6 @@ h3.sub:first-of-type { margin-top: 2rem; }
   display: grid; grid-template-columns: 1fr; gap: 1.4rem;
   max-width: none; margin: 0;
 }
-.reel-key {
-  margin: 0; color: var(--ink-3); font-size: .86rem; line-height: 1.5;
-}
 .reel-item { margin: 0; }
 .reel-item video {
   display: block; width: 100%; height: auto;

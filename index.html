@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=16">
 </head>
 <body>
 
@@ -139,39 +139,28 @@
     <div class="wrap">
       <h2>Method</h2>
 
-      <div class="mcol">
-        <p class="note">A transition to degraded mode switches perception to
-          radar-only detection and tracking and hands the controller a vehicle
-          state estimated from one 4D radar against a fixed prior radar map.
-          Planning and control are unchanged.</p>
-      </div>
-
       <figure class="figure figure--mid">
         <img src="figures/fig1_modes.png" width="1400" height="1297" loading="lazy"
              alt="Two block diagrams of the driving stack. In the nominal mode, camera, LiDAR, GNSS, radar, IMU and CAN feed perception and localization, localization also reads an HD map, and planning and control drive the vehicle. In the degraded mode the optical, satellite and proprioceptive sensors are greyed out as failed, radar feeds a radar perception module and a radar localization module that reads a radar map, and the same planning, control and vehicle blocks follow unchanged.">
-        <figcaption>Nominal multi-sensor mode (a) and the proposed radar-only
-          degraded mode (b). In nominal mode, perception and localization fuse
-          camera, LiDAR, GNSS, radar, inertial and vehicle-bus measurements
-          against an HD map. In degraded mode only the radar survives: it feeds
-          radar-only detection and tracking, and a localizer that matches scans
-          to a prior radar map. Planning, control and the actuation path are the
-          same modules in both, and never read which source is active. The
-          transition arrow is conceptual &mdash; in these experiments the
-          transitions were commanded manually, with no automatic fault
-          detection.</figcaption>
+        <figcaption>In nominal mode the stack fuses camera, LiDAR, GNSS,
+          radar, inertial and vehicle-bus measurements against an HD map. In
+          degraded mode only the radar survives: perception switches to
+          radar-only detection and tracking, and localization switches to one
+          4D radar matched against a prior radar map built before operation.
+          Planning and control are unchanged. This paper covers the radar-only
+          localization path; transitions were commanded manually.</figcaption>
       </figure>
 
       <figure class="figure figure--wide">
         <img src="figures/fig2_localization.png" width="2200" height="977" loading="lazy"
              alt="Pipeline diagram. Offline: multi-session logs, INS placement, block ICP refinement and voxel consensus produce the prior map. Online at 20 Hz: an initial GNSS pose and each radar scan pass through preprocessing and Doppler velocity estimation into Doppler-GICP against the fixed voxel map, feeding a 21-state sliding-window factor graph whose newest state becomes the vehicle state for planning and control.">
-        <figcaption>Prior-map radar localization. Top: offline map building
-          from multi-session logs, placed by INS/GNSS poses, refined by bounded
-          ICP and reduced by voxel consensus. Bottom: the online pipeline that
-          runs on every radar scan &mdash; preprocessing, Doppler velocity
-          estimation, Doppler-GICP against the fixed map, then a 21-state
-          fixed-lag factor graph whose newest state, after lever-arm and latency
-          compensation, is the vehicle state handed to planning and control.
-          GNSS initializes the pose once and is not read again.</figcaption>
+        <figcaption>Offline, scans from repeated sessions build a fixed
+          voxel radar map. Online at 20 Hz, each scan is preprocessed, yields a
+          Doppler velocity estimate, and registers against that map by
+          Doppler-GICP, feeding a 21-state sliding-window factor graph. The
+          newest state of the window, moved to the rear-axle centre and
+          latency-compensated, becomes the vehicle state handed to planning and
+          control.</figcaption>
       </figure>
     </div>
   </section>
@@ -239,6 +228,14 @@
         screen at once. Faces and the recorder&rsquo;s burnt-in text are masked.
         The badges come from the log recorded alongside the footage.
       </p>
+      <p class="lede wide srckey">
+        The frame is edged in the localization source the car is running on, so
+        a transition shows as it happens:
+        <span class="srcdot srcdot--gnss"></span>GNSS/INS,
+        <span class="srcdot srcdot--dr"></span>CAN dead reckoning,
+        <span class="srcdot srcdot--radar"></span>radar prior-map,
+        <span class="srcdot srcdot--lidar"></span>LiDAR prior-map.
+      </p>
 
       <div class="filters" role="group" aria-label="Filter recordings">
         <div class="filter-row" id="filter-scenario"></div>
@@ -274,7 +271,7 @@
   </div>
 </footer>
 
-<script src="data/recordings.js?v=14"></script>
-<script src="js/app.js?v=14"></script>
+<script src="data/recordings.js?v=16"></script>
+<script src="js/app.js?v=16"></script>
 </body>
 </html>

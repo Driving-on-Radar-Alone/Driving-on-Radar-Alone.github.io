@@ -189,6 +189,11 @@
     meta.appendChild(top);
 
     var badges = el("div", "badges");
+    // the two reported transitions share S1/S6 with ordinary runs, so they are
+    // tagged rather than left to look like another pass over the same road
+    if (r.transition) {
+      badges.appendChild(el("span", "badge badge--tr", "Transition · " + r.transition));
+    }
     if (r.scenario && byCode[r.scenario]) {
       var b = el("span", "badge badge--sc", r.scenario + " · " + byCode[r.scenario].title);
       badges.appendChild(b);

@@ -52,49 +52,44 @@
       no one takes over.
     </p>
 
-    <div class="reel">
-      <figure class="reel-item">
-        <video controls preload="none" playsinline
-               poster="posters/MAN_20260911_133151.jpg?v=6"
-               aria-label="Run A transition recording at 13:31:51, cameras and on-board RViz">
-          <source src="videos/MAN_20260911_133151.mp4?v=6" type="video/mp4">
-        </video>
-        <figcaption><span class="reel-time">13:31:51</span> Run A, in the
-          GNSS-shadowed section. The state source falls to dead reckoning at
-          11.2 s and switches to radar-only degraded mode at 18.5 s; true
-          cross-track error peaked at 1.02 m.</figcaption>
-      </figure>
-      <figure class="reel-item">
-        <video controls preload="none" playsinline
-               poster="posters/MAN_20260911_133335.jpg?v=6"
-               aria-label="Run B transition recording at 13:33:35, cameras and on-board RViz">
-          <source src="videos/MAN_20260911_133335.mp4?v=6" type="video/mp4">
-        </video>
-        <figcaption><span class="reel-time">13:33:35</span> Run B, urban lane
-          keeping. Dead reckoning from 5.1 s, radar-only degraded mode from
-          19.6 s; true cross-track error peaked at 2.28 m and recovered.</figcaption>
+    <div class="teaser-split">
+      <div class="reel">
+        <figure class="reel-item">
+          <video controls preload="none" playsinline
+                 poster="posters/MAN_20260911_133151.jpg?v=6"
+                 aria-label="Run A transition recording, cameras and on-board RViz">
+            <source src="videos/MAN_20260911_133151.mp4?v=6" type="video/mp4">
+          </video>
+          <figcaption>Run A, in the GNSS-shadowed section. The state source
+            falls to dead reckoning at 11.2 s and to radar-only degraded mode
+            at 18.5 s; true cross-track error peaked at 1.02 m.</figcaption>
+        </figure>
+        <figure class="reel-item">
+          <video controls preload="none" playsinline
+                 poster="posters/MAN_20260911_133335.jpg?v=6"
+                 aria-label="Run B transition recording, cameras and on-board RViz">
+            <source src="videos/MAN_20260911_133335.mp4?v=6" type="video/mp4">
+          </video>
+          <figcaption>Run B, in urban lane keeping. The state source falls to
+            dead reckoning at 5.1 s and to radar-only degraded mode at 19.6 s;
+            true cross-track error peaked at 2.28 m.</figcaption>
+        </figure>
+        <p class="reel-key">Each clip: forward and rear cameras and the cabin
+          views on the left, the car&rsquo;s own RViz screen on the right.</p>
+      </div>
+
+      <figure class="figure figure--beside">
+        <img src="figures/fig3_transitions_modes.png" width="1400" height="1385" loading="lazy"
+             alt="Two stacked time-series plots of lateral distance against time, one per run. Shading splits each run into a nominal mode and a degraded mode, with dashed markers at the emulated sensor fault and at fault detection. Between the two markers the localization error drifts away from zero while true cross-track error grows; Run A peaks near 1 m at the switch and Run B at 2.28 m, both settling within a couple of seconds.">
+        <figcaption>Two selected completed transitions (top: Run A, S6; bottom:
+          Run B, S1). The sensor-fault and fault-detected instants were emulated
+          by manual commands: the state source fell from GNSS to CAN dead
+          reckoning within nominal mode at the first, and switched to radar-only
+          degraded mode at the second. Controller CTE = true CTE + <i>e</i>,
+          where <i>e</i> is the localization error of the selected
+          state.</figcaption>
       </figure>
     </div>
-
-    <p class="note">Each clip now runs from the moment autonomous mode engages,
-      which is also when bag recording starts, so its timeline matches the
-      figure below. Left: forward and rear cameras, pedals and driver.
-      Right: the on-board RViz view.</p>
-
-    <figure class="figure figure--mid">
-      <img src="figures/fig3_transitions_modes.png" width="1400" height="1385" loading="lazy"
-           alt="Two stacked time-series plots of lateral distance against time, one per run. Shading splits each run into a nominal mode and a degraded mode, with dashed markers at the emulated sensor fault and at fault detection. Between the two markers the localization error drifts away from zero while true cross-track error grows; Run A peaks near 1 m at the switch and Run B at 2.28 m, both settling within a couple of seconds.">
-      <figcaption>Two selected completed transitions. Shading marks the
-        operating mode; the sensor-fault and fault-detected instants were
-        emulated by manual commands &mdash; the state source fell from GNSS to
-        CAN dead reckoning at the first, and switched to radar-only degraded
-        mode at the second. Black is true cross-track error, orange the
-        controller&rsquo;s, blue the localization error of the selected state.</figcaption>
-    </figure>
-    <p class="note">Dead-reckoning drift builds while the controller tracks the
-      path against an erroneous state. After the switch to radar, true cross-track
-      error peaked at 1.02 m and 2.28 m and both runs recovered below 0.3 m within
-      1.6 s, without intervention.</p>
   </div>
 </section>
 
@@ -115,23 +110,26 @@
     <div class="wrap">
       <h2>Abstract</h2>
       <div class="prose justify">
-        <p>Sensor failures can interrupt autonomous driving systems that rely on
-          multiple sensors. This paper proposes a degraded driving mode supported
-          by a single four-dimensional (4D) imaging radar. The experiments
-          validate radar-only vehicle-state estimation within an existing driving
-          stack. The estimator matches radar scans to a fixed prior map and
-          couples Doppler motion estimates across recent states. Evaluation covers
-          localization accuracy, temporal stability, closed-loop control and
-          component removal. A passenger car completed the evaluated segments on
-          seven road types without intervention at a proving ground. Two selected
-          completed transitions with a real-time kinematic positioning reference
-          had maximum lateral localization errors of 0.478 m and 0.130 m; the
-          former exceeded the 0.44 m reference line for 0.70 s. Within-mode checks
-          found no pose step mismatch above 0.1 m across analysis spans totalling
-          6.08 km. Control metrics varied with road type and speed. The results
-          provide an empirical assessment of the tested conditions, without
-          establishing autonomous fault recovery or a validated operating
-          envelope.</p>
+        <p>Autonomous driving stacks fuse global navigation satellite system
+          (GNSS), inertial, light detection and ranging (LiDAR), camera and radar
+          measurements, so the loss of one sensor can disable the modules that
+          depend on it and interrupt driving. LiDAR, cameras and GNSS depend on
+          external conditions; inertial and wheel sensors observe only ego
+          motion. Radar measures range and relative velocity in the conditions
+          that disable them, and four-dimensional (4D) imaging radar has brought
+          radar-only driving within reach. Prior work has validated radar-only
+          perception, but radar-only localization has not been validated in
+          closed loop on the road. This paper therefore proposes a degraded mode
+          in which a single 4D radar operates the driving stack after other
+          sensors fail. Perception switches to radar-only multi-object detection
+          and tracking, and the vehicle state to a proposed radar-only localizer
+          that matches scans to a fixed prior map and couples Doppler motion
+          without inertial sensing. We validated the proposed localizer on a
+          passenger car in closed loop: the car running the degraded mode
+          completed seven road-type scenarios without intervention and continued
+          driving through manually commanded transitions into degraded mode. The
+          results are an empirical operational design domain assessment, not
+          validated operating limits.</p>
       </div>
     </div>
   </section>
@@ -145,16 +143,35 @@
         <p class="note">A transition to degraded mode switches perception to
           radar-only detection and tracking and hands the controller a vehicle
           state estimated from one 4D radar against a fixed prior radar map.
-          Planning and control are unchanged and never read which source is
-          active. After the initial GNSS pose, the estimator uses no LiDAR,
-          camera, IMU, GNSS or CAN measurement.</p>
+          Planning and control are unchanged.</p>
       </div>
+
+      <figure class="figure figure--mid">
+        <img src="figures/fig1_modes.png" width="1400" height="1297" loading="lazy"
+             alt="Two block diagrams of the driving stack. In the nominal mode, camera, LiDAR, GNSS, radar, IMU and CAN feed perception and localization, localization also reads an HD map, and planning and control drive the vehicle. In the degraded mode the optical, satellite and proprioceptive sensors are greyed out as failed, radar feeds a radar perception module and a radar localization module that reads a radar map, and the same planning, control and vehicle blocks follow unchanged.">
+        <figcaption>Nominal multi-sensor mode (a) and the proposed radar-only
+          degraded mode (b). In nominal mode, perception and localization fuse
+          camera, LiDAR, GNSS, radar, inertial and vehicle-bus measurements
+          against an HD map. In degraded mode only the radar survives: it feeds
+          radar-only detection and tracking, and a localizer that matches scans
+          to a prior radar map. Planning, control and the actuation path are the
+          same modules in both, and never read which source is active. The
+          transition arrow is conceptual &mdash; in these experiments the
+          transitions were commanded manually, with no automatic fault
+          detection.</figcaption>
+      </figure>
 
       <figure class="figure figure--wide">
         <img src="figures/fig2_localization.png" width="2200" height="977" loading="lazy"
              alt="Pipeline diagram. Offline: multi-session logs, INS placement, block ICP refinement and voxel consensus produce the prior map. Online at 20 Hz: an initial GNSS pose and each radar scan pass through preprocessing and Doppler velocity estimation into Doppler-GICP against the fixed voxel map, feeding a 21-state sliding-window factor graph whose newest state becomes the vehicle state for planning and control.">
-        <figcaption>Offline map building, and the online pipeline that runs on
-          every radar scan.</figcaption>
+        <figcaption>Prior-map radar localization. Top: offline map building
+          from multi-session logs, placed by INS/GNSS poses, refined by bounded
+          ICP and reduced by voxel consensus. Bottom: the online pipeline that
+          runs on every radar scan &mdash; preprocessing, Doppler velocity
+          estimation, Doppler-GICP against the fixed map, then a 21-state
+          fixed-lag factor graph whose newest state, after lever-arm and latency
+          compensation, is the vehicle state handed to planning and control.
+          GNSS initializes the pose once and is not read again.</figcaption>
       </figure>
     </div>
   </section>
@@ -218,11 +235,12 @@
     <div class="wrap">
       <h2>Videos</h2>
       <p class="lede wide">
-        Each clip shows all four camera angles at once, assembled from the
-        synchronised originals without reframing. Faces and the recorder&rsquo;s
-        burnt-in text are masked. The badges &mdash; road type, localization
-        source and peak speed &mdash; come from the log recorded alongside the
-        footage.
+        Each clip shows the four camera angles and the car&rsquo;s own RViz
+        screen at once, assembled from the synchronised originals without
+        reframing, and starts where autonomous mode engages. Faces and the
+        recorder&rsquo;s burnt-in text are masked. The badges &mdash; road type,
+        localization source and peak speed &mdash; come from the log recorded
+        alongside the footage.
       </p>
 
       <div class="filters" role="group" aria-label="Filter recordings">

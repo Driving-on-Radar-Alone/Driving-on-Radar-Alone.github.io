@@ -326,10 +326,19 @@ h3.sub:first-of-type { margin-top: 2rem; }
 .figure--wide   { max-width: none; }
 
 /* two stacked transition clips above the abstract ------------------------- */
-/* the clips are 5-up and close to 3.7:1, so they run one per row */
+/* the clips are 5-up and close to 3.7:1, which is flat enough that two of them
+   stacked stand about as tall as the square plot set beside them */
+.teaser-split {
+  display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: 1.8rem; align-items: start; margin: 0 auto 2.6rem;
+}
+.teaser-split .figure--beside { max-width: none; margin: 0; }
 .reel {
-  display: grid; grid-template-columns: 1fr; gap: 1.8rem;
-  max-width: none; margin: 0 auto 2.8rem;
+  display: grid; grid-template-columns: 1fr; gap: 1.4rem;
+  max-width: none; margin: 0;
+}
+.reel-key {
+  margin: 0; color: var(--ink-3); font-size: .86rem; line-height: 1.5;
 }
 .reel-item { margin: 0; }
 .reel-item video {
@@ -614,6 +623,7 @@ figcaption {
 .badge--lidar { border-color: var(--ink-2); color: var(--ink); }
 .badge--gnss  { border-style: dotted; }
 .badge--todo { border-style: dashed; color: var(--ink-3); }
+.badge--tr { background: var(--ink); border-color: var(--ink); color: #fff; }
 .card-note { margin: 0; color: var(--ink-2); font-size: .87rem; line-height: 1.5; }
 
 .empty {
@@ -656,6 +666,7 @@ figcaption {
 }
 @media (max-width: 760px) {
   .reel { grid-template-columns: 1fr; }
+  .teaser-split { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
   .cols, .cols--2 { grid-template-columns: 1fr; }

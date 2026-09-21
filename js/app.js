@@ -164,7 +164,6 @@
   /* --- grid ------------------------------------------------------------- */
   var grid = document.getElementById("grid");
   var emptyMsg = document.getElementById("empty");
-  var resultLine = document.getElementById("result-line");
 
   function card(r) {
     var li = el("li", "card");
@@ -228,10 +227,6 @@
     shown.forEach(function (r) { grid.appendChild(card(r)); });
     emptyMsg.hidden = shown.length > 0;
 
-    var mins = Math.round(
-      shown.reduce(function (a, r) { return a + (r.seconds || 0); }, 0) / 60);
-    resultLine.textContent =
-      shown.length + " of " + recs.length + " recordings · " + mins + " min";
   }
 
   render();

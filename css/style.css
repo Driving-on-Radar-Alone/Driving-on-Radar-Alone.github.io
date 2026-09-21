@@ -330,9 +330,9 @@ h3.sub:first-of-type { margin-top: 2rem; }
    stacked stand about as tall as the square plot set beside them */
 .teaser-split {
   display: grid;
-  /* 0.9423 : 1 puts the Run A zero line level with the bottom of the first
-     clip -- the clip is 3.764:1 and the zero line sits 25.0 % down the plot */
-  grid-template-columns: minmax(0, 0.9423fr) minmax(0, 1fr);
+  /* 1.4933 : 1 puts the Run A -3 line level with the bottom of the first clip
+     -- the clip is 3.764:1 and that gridline sits 40.1 % down the plot */
+  grid-template-columns: minmax(0, 1.4933fr) minmax(0, 1fr);
   gap: 1.8rem; align-items: start; margin: 0 auto 2.6rem;
 }
 .teaser-split .figure--beside { max-width: none; margin: 0; }
@@ -585,16 +585,6 @@ figcaption {
   background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 500;
 }
 .chip .n { opacity: .55; margin-left: .35em; }
-
-.result-line {
-  margin: 0 0 1.5rem;
-  text-align: center;
-  font-family: var(--mono);
-  font-size: .72rem;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
 
 /* --- recordings ---------------------------------------------------------- */
 

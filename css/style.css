@@ -22,6 +22,7 @@
 
   --measure: 41rem;   /* fixed unit: ch differs between the display and body faces */
   --wrap: 1080px;
+  --wrap-wide: 1400px;
   --pad: clamp(1rem, 4vw, 2.25rem);
   --r: 4px;
 }
@@ -51,6 +52,9 @@ body {
   margin-inline: auto;
   padding-inline: var(--pad);
 }
+/* the teaser holds two 3.76:1 clips beside a plot, so it is given more room
+   than the reading measure the rest of the page is built around */
+.wrap--wide { max-width: var(--wrap-wide); }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px;
@@ -336,6 +340,9 @@ h3.sub:first-of-type { margin-top: 2rem; }
   gap: 1.8rem; align-items: start; margin: 0 auto 2.6rem;
 }
 .teaser-split .figure--beside { max-width: none; margin: 0; }
+.reel-key {
+  margin: .2rem 0 0; color: var(--ink-3); font-size: .86rem; line-height: 1.5;
+}
 .reel {
   display: grid; grid-template-columns: 1fr; gap: 1.4rem;
   max-width: none; margin: 0;

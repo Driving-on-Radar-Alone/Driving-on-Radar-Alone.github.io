@@ -146,6 +146,10 @@
       var n = countFor(s.code);
       if (n) scItems.push({ value: s.code, label: s.code, n: n });
     });
+    var nTrans = recs.filter(function (r) { return r.transition; }).length;
+    if (nTrans) {
+      scItems.push({ value: "__transition", label: "Transition", n: nTrans });
+    }
     if (unassigned && scenarios.length) {
       scItems.push({ value: "__none", label: "Unassigned", n: unassigned });
     }
@@ -191,7 +195,7 @@
     // the two reported transitions share S1/S6 with ordinary runs, so they are
     // tagged rather than left to look like another pass over the same road
     if (r.transition) {
-      badges.appendChild(el("span", "badge badge--tr", "Transition · " + r.transition));
+      badges.appendChild(el("span", "badge badge--tr", "Transition"));
     }
     if (r.scenario && byCode[r.scenario]) {
       var b = el("span", "badge badge--sc", r.scenario + " · " + byCode[r.scenario].title);
@@ -216,7 +220,8 @@
 
   function matches(r) {
     var okS = state.scenario === "all" ||
-      (state.scenario === "__none" ? !r.scenario : r.scenario === state.scenario);
+      (state.scenario === "__transition" ? !!r.transition :
+       state.scenario === "__none" ? !r.scenario : r.scenario === state.scenario);
     var okR = state.run === "all" || r.run === state.run;
     return okS && okR;
   }

@@ -378,6 +378,11 @@ figcaption {
   font-size: .92rem;
   line-height: 1.6;
 }
+/* a caption narrower than its own figure reads as a mistake, so every figure
+   caption runs the width of the image above it */
+.figure figcaption { max-width: 100%; }
+/* and one figure's caption must not run into the next figure's image */
+.figure + .figure { margin-top: 2.8rem; }
 .tag {
   display: inline-block;
   min-width: 1.35em;

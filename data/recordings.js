@@ -61,8 +61,8 @@ const SCENARIOS = [
 
 const RECORDINGS = [
   { id: "MAN_20260911_112010", clock: "11:20:10", seconds: 46, scenario: "S1", run: "radar", speed: 50, side: "", note: "", hidden: false },
-  { id: "MAN_20260911_112349", clock: "11:23:49", seconds: 37, scenario: "S3", run: "radar", speed: 27, side: "left", note: "", hidden: false },
-  { id: "MAN_20260911_112545", clock: "11:25:45", seconds: 34, scenario: "S2", run: "radar", speed: 27, side: "right", note: "", hidden: false },
+  { id: "MAN_20260911_112349", clock: "11:23:49", seconds: 37, scenario: "S3", run: "radar", speed: 27, side: "", note: "", hidden: false },
+  { id: "MAN_20260911_112545", clock: "11:25:45", seconds: 34, scenario: "S2", run: "radar", speed: 27, side: "", note: "", hidden: false },
   { id: "MAN_20260911_112817", clock: "11:28:17", seconds: 46, scenario: "S4", run: "radar", speed: 16, side: "", note: "", hidden: false },
   { id: "MAN_20260911_113147", clock: "11:31:47", seconds: 47, scenario: "S5", run: "radar", speed: 78, side: "", note: "", hidden: false },
   { id: "MAN_20260911_113325", clock: "11:33:25", seconds: 46, scenario: "S6", run: "radar", speed: 50, side: "", note: "", hidden: false },
@@ -71,8 +71,8 @@ const RECORDINGS = [
   { id: "MAN_20260911_133151", clock: "13:31:51", seconds: 42, scenario: "S6", run: "radar", speed: 50, side: "", transition: "Run A", note: "", hidden: false },
   { id: "MAN_20260911_133335", clock: "13:33:35", seconds: 53, scenario: "S1", run: "radar", speed: 50, side: "", transition: "Run B", note: "", hidden: false },
   { id: "MAN_20260911_150259", clock: "15:02:59", seconds: 54, scenario: "S1", run: "lidar", speed: 51, side: "", note: "", hidden: false },
-  { id: "MAN_20260911_150435", clock: "15:04:35", seconds: 37, scenario: "S3", run: "lidar", speed: 29, side: "left", note: "", hidden: false },
-  { id: "MAN_20260911_150558", clock: "15:05:58", seconds: 31, scenario: "S2", run: "lidar", speed: 25, side: "right", note: "", hidden: false },
+  { id: "MAN_20260911_150435", clock: "15:04:35", seconds: 37, scenario: "S3", run: "lidar", speed: 29, side: "", note: "", hidden: false },
+  { id: "MAN_20260911_150558", clock: "15:05:58", seconds: 31, scenario: "S2", run: "lidar", speed: 25, side: "", note: "", hidden: false },
   { id: "MAN_20260911_150802", clock: "15:08:02", seconds: 40, scenario: "S4", run: "lidar", speed: 17, side: "", note: "", hidden: false },
   { id: "MAN_20260911_150952", clock: "15:09:52", seconds: 53, scenario: "S5", run: "lidar", speed: 77, side: "", note: "", hidden: false },
   { id: "MAN_20260911_151428", clock: "15:14:28", seconds: 46, scenario: "S6", run: "lidar", speed: 48, side: "", note: "", hidden: false },

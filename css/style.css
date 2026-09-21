@@ -329,7 +329,10 @@ h3.sub:first-of-type { margin-top: 2rem; }
 /* the clips are 5-up and close to 3.7:1, which is flat enough that two of them
    stacked stand about as tall as the square plot set beside them */
 .teaser-split {
-  display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  display: grid;
+  /* 0.9423 : 1 puts the Run A zero line level with the bottom of the first
+     clip -- the clip is 3.764:1 and the zero line sits 25.0 % down the plot */
+  grid-template-columns: minmax(0, 0.9423fr) minmax(0, 1fr);
   gap: 1.8rem; align-items: start; margin: 0 auto 2.6rem;
 }
 .teaser-split .figure--beside { max-width: none; margin: 0; }

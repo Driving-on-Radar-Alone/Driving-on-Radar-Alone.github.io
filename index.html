@@ -204,12 +204,14 @@
         The badges come from the log recorded alongside the footage.
       </p>
       <p class="lede wide srckey">
-        The frame is edged in the localization source the car is running on, so
+        The frame is edged and labelled in the mode the car is running in, so
         a transition shows as it happens:
-        <span class="srcdot srcdot--gnss"></span>GNSS/INS,
-        <span class="srcdot srcdot--dr"></span>CAN dead reckoning,
-        <span class="srcdot srcdot--radar"></span>radar prior-map,
-        <span class="srcdot srcdot--lidar"></span>LiDAR prior-map.
+        <span class="srcdot srcdot--gnss"></span>nominal mode &ndash; normal
+        driving, <span class="srcdot srcdot--dr"></span>nominal mode &ndash;
+        sensor fault, <span class="srcdot srcdot--radar"></span>degraded mode
+        &ndash; radar-only driving,
+        <span class="srcdot srcdot--lidar"></span>nominal mode &ndash; LiDAR
+        baseline.
       </p>
 
       <div class="filters" role="group" aria-label="Filter recordings">

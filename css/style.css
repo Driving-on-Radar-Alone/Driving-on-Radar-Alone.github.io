@@ -333,10 +333,8 @@ h3.sub:first-of-type { margin-top: 2rem; }
 /* 16:9 at the 1400 px wide wrap would tower over the fold, so the teaser drops
    back to the standard wrap and the film simply fills it */
 .film { max-width: none; margin: 0 auto 1rem; }
-/* the film's own line of metadata, under its caption */
-.cap-meta {
-  display: block;
-  margin-top: .4rem;
+/* the film says what it holds, so its caption is a line of metadata only */
+.film figcaption {
   font-family: var(--mono);
   font-size: .78rem;
   letter-spacing: .02em;

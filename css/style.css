@@ -322,6 +322,18 @@ h3.sub:first-of-type { margin-top: 2rem; }
 
 .teaser { padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 4vw, 3rem); }
 
+/* the one-line claim that opens the teaser */
+.teaser-claim {
+  margin: 0 auto .75rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+  letter-spacing: -.02em;
+  line-height: 1.2;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
 /* --- figures ------------------------------------------------------------- */
 
 .figure { margin: 0 auto; }
@@ -329,39 +341,16 @@ h3.sub:first-of-type { margin-top: 2rem; }
 .figure--mid    { max-width: 780px; }
 .figure--wide   { max-width: none; }
 
-/* two stacked transition clips above the abstract ------------------------- */
-/* the clips are 5-up and close to 3.7:1, which is flat enough that two of them
-   stacked stand about as tall as the square plot set beside them */
-.teaser-split {
-  display: grid;
-  /* 1.4933 : 1 puts the Run A -3 line level with the bottom of the first clip
-     -- the clip is 3.764:1 and that gridline sits 40.1 % down the plot */
-  grid-template-columns: minmax(0, 1.4933fr) minmax(0, 1fr);
-  gap: 1.8rem; align-items: start; margin: 0 auto 2.6rem;
-}
-.teaser-split .figure--beside { max-width: none; margin: 0; }
-.reel-key {
-  margin: .2rem 0 0; color: var(--ink-3); font-size: .86rem; line-height: 1.5;
-}
-.reel {
-  display: grid; grid-template-columns: 1fr; gap: 1.4rem;
-  max-width: none; margin: 0;
-}
-.reel-item { margin: 0; }
-.reel-item video {
+/* the supplementary film above the abstract ------------------------------- */
+/* 16:9 at the 1400 px wide wrap would tower over the fold, so the teaser drops
+   back to the standard wrap and the film simply fills it */
+.film { max-width: none; margin: 0 auto 1rem; }
+.film video {
   display: block; width: 100%; height: auto;
   background: #0c0e11;
   border: 1px solid var(--line); border-radius: var(--r);
 }
-.reel-item figcaption {
-  margin-top: .7rem; max-width: none;
-  font-size: .9rem; color: var(--ink-2);
-}
-.reel-time {
-  margin-right: .5rem;
-  font-family: var(--mono); font-size: .78rem; font-weight: 500;
-  letter-spacing: .04em; color: var(--accent);
-}
+
 .figure img {
   display: block;
   width: 100%;
@@ -676,10 +665,6 @@ figcaption {
 }
 @media (max-width: 900px) {
   .cols { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 760px) {
-  .reel { grid-template-columns: 1fr; }
-  .teaser-split { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
   .cols, .cols--2 { grid-template-columns: 1fr; }

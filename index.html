@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
-<link rel="stylesheet" href="css/style.css?v=17">
+<link rel="stylesheet" href="css/style.css?v=18">
 </head>
 <body>
 
@@ -45,51 +45,26 @@
 </header>
 
 <section class="band teaser">
-  <div class="wrap wrap--wide">
+  <div class="wrap">
+    <p class="teaser-claim">Every other sensor fails &mdash; one 4D radar keeps
+      the car driving.</p>
     <p class="lede wide">
-      Two runs in which the vehicle state was switched over to radar while
-      driving. The controller keeps tracking the mapped path through the switch;
-      no one takes over.
+      The runs simulate the loss of LiDAR, camera, GNSS and inertial sensing
+      while the car is driving. Perception and the vehicle state then run on
+      that single 4D radar against a prior radar map, with planning and control
+      unchanged and no human takeover.
     </p>
 
-    <div class="teaser-split">
-      <div class="reel">
-        <figure class="reel-item">
-          <video controls preload="none" playsinline
-                 poster="posters/MAN_20260911_133151.jpg?v=7"
-                 aria-label="Run A transition recording, cameras and on-board RViz">
-            <source src="videos/MAN_20260911_133151.mp4?v=7" type="video/mp4">
-          </video>
-          <figcaption>Run A, in the GNSS-shadowed section. The state source
-            falls to dead reckoning at 11.2 s and to radar-only degraded mode
-            at 18.5 s; true cross-track error peaked at 1.02 m.</figcaption>
-        </figure>
-        <figure class="reel-item">
-          <video controls preload="none" playsinline
-                 poster="posters/MAN_20260911_133335.jpg?v=7"
-                 aria-label="Run B transition recording, cameras and on-board RViz">
-            <source src="videos/MAN_20260911_133335.mp4?v=7" type="video/mp4">
-          </video>
-          <figcaption>Run B, in urban lane keeping. The state source falls to
-            dead reckoning at 5.1 s and to radar-only degraded mode at 19.6 s;
-            true cross-track error peaked at 2.28 m.</figcaption>
-        </figure>
-        <p class="reel-key">Left: forward and rear cameras, pedals and driver.
-          Right: the on-board RViz view.</p>
-      </div>
-
-      <figure class="figure figure--beside">
-        <img src="figures/fig3_transitions_modes.png" width="1400" height="1385" loading="lazy"
-             alt="Two stacked time-series plots of lateral distance against time, one per run. Shading splits each run into a nominal mode and a degraded mode, with dashed markers at the emulated sensor fault and at fault detection. Between the two markers the localization error drifts away from zero while true cross-track error grows; Run A peaks near 1 m at the switch and Run B at 2.28 m, both settling within a couple of seconds.">
-        <figcaption>Two selected completed transitions (top: Run A, S6; bottom:
-          Run B, S1). The sensor-fault and fault-detected instants were emulated
-          by manual commands: the state source fell from GNSS to CAN dead
-          reckoning within nominal mode at the first, and switched to radar-only
-          degraded mode at the second. Controller CTE = true CTE + <i>e</i>,
-          where <i>e</i> is the localization error of the selected
-          state.</figcaption>
-      </figure>
-    </div>
+    <figure class="figure film">
+      <video controls preload="none" playsinline
+             poster="posters/supplementary.jpg?v=1"
+             aria-label="Supplementary video: radar-only fail-operational autonomous driving">
+        <source src="videos/supplementary.mp4?v=1" type="video/mp4">
+      </video>
+      <figcaption>Supplementary video, 3 min: the degraded mode, then the two
+        commanded transitions into it, each shown as the four camera angles, the
+        car&rsquo;s own RViz screen and the cross-track error at once.</figcaption>
+    </figure>
   </div>
 </section>
 

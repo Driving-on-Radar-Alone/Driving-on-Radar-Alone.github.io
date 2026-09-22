@@ -322,18 +322,6 @@ h3.sub:first-of-type { margin-top: 2rem; }
 
 .teaser { padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 4vw, 3rem); }
 
-/* the one-line claim that opens the teaser */
-.teaser-claim {
-  margin: 0 auto .75rem;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
-  letter-spacing: -.02em;
-  line-height: 1.2;
-  color: var(--ink);
-  text-wrap: balance;
-}
-
 /* --- figures ------------------------------------------------------------- */
 
 .figure { margin: 0 auto; }

@@ -674,6 +674,13 @@ figcaption {
   font-size: .86rem;
 }
 .foot p { margin: 0; }
+/* the AI-use statement is a paragraph, not a one-liner, so it gets its own
+   measure rather than running the full width of the footer */
+.foot .foot-ai {
+  max-width: 68ch;
+  margin: .8rem auto 0;
+  line-height: 1.6;
+}
 
 /* --- narrow -------------------------------------------------------------- */
 

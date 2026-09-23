@@ -120,6 +120,7 @@ body {
   margin-top: 1.9rem;
 }
 .btn {
+  position: relative;
   display: inline-flex; align-items: center; gap: .5rem;
   padding: .5rem .95rem;
   border-radius: 999px;
@@ -144,8 +145,29 @@ body {
   color: var(--ink-3);
   border: 1px solid var(--line);
   cursor: default;
+}
+
+/* a disabled button can say why, on hover. It carries no href, so there is
+   nothing to click through to and nothing to stop. */
+.btn-tip {
+  position: absolute;
+  left: 50%; top: calc(100% + .5rem);
+  z-index: 6;
+  transform: translateX(-50%);
+  padding: .35rem .6rem;
+  border-radius: var(--r);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 400;
+  letter-spacing: .03em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .15s;
   pointer-events: none;
 }
+.btn:hover .btn-tip { opacity: 1; }
 
 /* key figures under the masthead ------------------------------------------- */
 
@@ -665,6 +687,8 @@ figcaption {
   .cols, .cols--2 { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
+  /* nowrap would push the tip past the viewport edge on a narrow screen */
+  .btn-tip { white-space: normal; width: max-content; max-width: 70vw; text-align: center; }
   .grid { grid-template-columns: 1fr; }
   .spec { gap: .7rem 1.4rem; }
 }
